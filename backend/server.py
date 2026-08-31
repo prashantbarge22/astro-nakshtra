@@ -2,11 +2,12 @@ import asyncio
 import logging
 import os
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
+import jwt
 from dotenv import load_dotenv
-from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, Request, Body
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, EmailStr
 from starlette.middleware.cors import CORSMiddleware
@@ -115,9 +116,52 @@ async def verify_booking_payment(input: PaymentVerify):
     return {"booking": booking}
 
 
+JWT_ALG = "HS256"
+BOOKING_STATUSES = {"pending_confirmation", "confirmed", "completed", "cancelled"}
+
+
+class AdminLogin(BaseModel):
+    password: str
+
+
+def require_admin(request: Request):
+    auth = request.headers.get("Authorization", "")
+    token = auth[7:] if auth.startswith("Bearer ") else None
+    if not token:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    try:
+        payload = jwt.decode(token, os.environ["JWT_SECRET"], algorithms=[JWT_ALG])
+        if payload.get("sub") != "admin":
+            raise HTTPException(status_code=401, detail="Invalid token")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+
+
+@api_router.post("/admin/login")
+async def admin_login(input: AdminLogin):
+    if input.password != os.environ.get("ADMIN_PASSWORD", ""):
+        raise HTTPException(status_code=401, detail="Wrong password")
+    token = jwt.encode(
+        {"sub": "admin", "exp": datetime.now(timezone.utc) + timedelta(hours=12)},
+        os.environ["JWT_SECRET"],
+        algorithm=JWT_ALG,
+    )
+    return {"token": token}
+
+
 @api_router.get("/bookings")
-async def list_bookings():
+async def list_bookings(_=Depends(require_admin)):
     return await db.bookings.find({}, {"_id": 0}).sort("created_at", -1).to_list(500)
+
+
+@api_router.patch("/bookings/{booking_id}/status")
+async def update_booking_status(booking_id: str, status: str = Body(..., embed=True), _=Depends(require_admin)):
+    if status not in BOOKING_STATUSES:
+        raise HTTPException(status_code=400, detail="Invalid status")
+    res = await db.bookings.update_one({"id": booking_id}, {"$set": {"status": status}})
+    if res.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Booking not found")
+    return {"id": booking_id, "status": status}
 
 
 app.include_router(api_router)

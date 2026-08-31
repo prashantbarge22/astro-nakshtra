@@ -19,11 +19,11 @@ const en = {
   manifesto: {
     title: "You don't need more noise. You need a clearer direction.",
     chapters: [
-      { n: "01", h: "A small price for a serious question.", p: "₹99 for 20 minutes may sound small. The question you're carrying may not be. Don't think of this as spending ₹99 — think of it as one small step toward putting your life back on the right track." },
-      { n: "02", h: "One-on-one, not one-click automation.", p: "You get a dedicated slot with a real human — never a chatbot pretending to understand you. Real human guidance. Real time. Your questions. Your slot." },
-      { n: "03", h: "No sugar-coating.", p: "We don't tell you what sounds nice just to make you feel better. If something needs to be heard, we say it honestly and respectfully — so you know what you can do next." },
-      { n: "04", h: "Twenty minutes can be enough.", p: "Not because your life is simple, but because the session is focused. You spend those 20 minutes on your questions — and a personalised perspective on what to do next." },
-      { n: "05", h: "Private means private.", p: "Your birth details, questions and conversations are handled with complete discretion. What you discuss with us stays personal. Trust is not a design element — it is the foundation." },
+      { n: "01", h: "A small price for a serious question.", p: "₹99 may sound small. The question you're carrying may not be. Take one small step back toward the right track." },
+      { n: "02", h: "One-on-one, not one-click automation.", p: "A dedicated slot with a real human — never a chatbot. Your questions. Your slot." },
+      { n: "03", h: "No sugar-coating.", p: "If something needs to be heard, we say it honestly and respectfully — so you know what to do next." },
+      { n: "04", h: "Twenty minutes can be enough.", p: "A focused session spent entirely on your questions and your next step." },
+      { n: "05", h: "Private means private.", p: "Your birth details and conversations stay personal. Trust is the foundation." },
     ],
     quote: "A little clarity can change the direction you take next.",
   },
@@ -106,7 +106,7 @@ const en = {
     cta: "Explore gemstones",
   },
   testimonials: {
-    eyebrow: "4.9 ★★★★★",
+    eyebrow: "Our feedbacks · 4.9 ★★★★★",
     title: "Trusted by 5,000+ customers",
     sub: "Real people. Real questions. Personal guidance.",
     quotes: [
@@ -122,6 +122,7 @@ const en = {
   astrologer: {
     eyebrow: "Meet your astrologer",
     name: "Shri Rajendra Kumar Gupta",
+    trust: "Your destiny, understood. Your trust, honoured.",
     p1: "With 40+ years of experience in astrology, Shri Rajendra Kumar Gupta personally handles every consultation and provides individual guidance based on your birth details and concerns.",
     p2: "This is intentionally kept personal — one astrologer, limited daily consultations, one conversation at a time.",
     stats: [{ n: "40+", l: "Years of experience" }, { n: "5,000+", l: "Customers guided" }, { n: "4.9", l: "Average rating" }],
@@ -191,11 +192,11 @@ const hi = {
   manifesto: {
     title: "आपको और शोर नहीं चाहिए। आपको एक स्पष्ट दिशा चाहिए।",
     chapters: [
-      { n: "01", h: "एक गंभीर सवाल के लिए छोटी कीमत।", p: "20 मिनट के लिए ₹99 शायद छोटी रकम लगे। लेकिन जो सवाल आप मन में लिए घूम रहे हैं, शायद वो छोटा नहीं है। इसे ₹99 खर्च करना मत समझिए — इसे ज़िंदगी को सही राह पर लाने की ओर एक छोटा कदम समझिए।" },
-      { n: "02", h: "वन-ऑन-वन, वन-क्लिक ऑटोमेशन नहीं।", p: "आपको एक असली इंसान के साथ समर्पित स्लॉट मिलता है — कोई चैटबॉट नहीं जो आपको समझने का नाटक करे। असली मार्गदर्शन। असली समय। आपके सवाल। आपका स्लॉट।" },
-      { n: "03", h: "कोई झूठी तसल्ली नहीं।", p: "हम वो नहीं कहते जो सिर्फ सुनने में अच्छा लगे। जो कहना ज़रूरी है, हम उसे ईमानदारी और सम्मान के साथ कहते हैं — ताकि आप जान सकें कि आगे क्या करना है।" },
-      { n: "04", h: "बीस मिनट काफी हो सकते हैं।", p: "इसलिए नहीं कि आपकी ज़िंदगी आसान है, बल्कि इसलिए कि सत्र पूरी तरह केंद्रित होता है। वो 20 मिनट आप अपने सवालों पर लगाते हैं — और आगे क्या करना है, इसका व्यक्तिगत दृष्टिकोण पाते हैं।" },
-      { n: "05", h: "निजी का मतलब निजी।", p: "आपकी जन्म-जानकारी, सवाल और बातचीत पूरी गोपनीयता के साथ संभाली जाती है। आप जो हमसे कहते हैं, वो निजी ही रहता है। भरोसा कोई डिज़ाइन नहीं — यही हमारी नींव है।" },
+      { n: "01", h: "एक गंभीर सवाल के लिए छोटी कीमत।", p: "₹99 छोटी रकम लग सकती है। आपका सवाल शायद छोटा नहीं है। सही राह की ओर एक छोटा कदम बढ़ाइए।" },
+      { n: "02", h: "वन-ऑन-वन, वन-क्लिक ऑटोमेशन नहीं।", p: "असली इंसान के साथ समर्पित स्लॉट — कोई चैटबॉट नहीं। आपके सवाल। आपका स्लॉट।" },
+      { n: "03", h: "कोई झूठी तसल्ली नहीं।", p: "जो कहना ज़रूरी है, हम ईमानदारी और सम्मान के साथ कहते हैं — ताकि आप जानें आगे क्या करना है।" },
+      { n: "04", h: "बीस मिनट काफी हो सकते हैं।", p: "पूरा सत्र सिर्फ आपके सवालों और आपके अगले कदम पर केंद्रित।" },
+      { n: "05", h: "निजी का मतलब निजी।", p: "आपकी जानकारी और बातचीत निजी रहती है। भरोसा ही नींव है।" },
     ],
     quote: "थोड़ी सी स्पष्टता आपकी अगली दिशा बदल सकती है।",
   },
@@ -278,7 +279,7 @@ const hi = {
     cta: "रत्न देखें",
   },
   testimonials: {
-    eyebrow: "4.9 ★★★★★",
+    eyebrow: "हमारे फ़ीडबैक · 4.9 ★★★★★",
     title: "5,000+ ग्राहकों का भरोसा",
     sub: "असली लोग। असली सवाल। व्यक्तिगत मार्गदर्शन।",
     quotes: [
@@ -294,6 +295,7 @@ const hi = {
   astrologer: {
     eyebrow: "अपने ज्योतिषी से मिलिए",
     name: "श्री राजेन्द्र कुमार गुप्ता",
+    trust: "आपकी किस्मत, समझी गई। आपका भरोसा, सम्मानित।",
     p1: "ज्योतिष में 40+ वर्षों के अनुभव के साथ, श्री राजेन्द्र कुमार गुप्ता स्वयं हर परामर्श संभालते हैं और आपकी जन्म-जानकारी व चिंताओं के आधार पर व्यक्तिगत मार्गदर्शन देते हैं।",
     p2: "ये जानबूझकर व्यक्तिगत रखा गया है — एक ज्योतिषी, सीमित दैनिक परामर्श, एक समय में एक बातचीत।",
     stats: [{ n: "40+", l: "वर्षों का अनुभव" }, { n: "5,000+", l: "ग्राहकों का मार्गदर्शन" }, { n: "4.9", l: "औसत रेटिंग" }],

@@ -13,7 +13,7 @@ export default function FinalCTA() {
   const starsY = useTransform(scrollYProgress, [0, 1], [60, -60]);
 
   return (
-    <section ref={ref} className="relative py-32 sm:py-40 overflow-hidden" data-testid="final-cta-section">
+    <section ref={ref} className="relative py-20 sm:py-28 overflow-hidden" data-testid="final-cta-section">
       <motion.div style={{ y: starsY }} className="absolute inset-0 pointer-events-none opacity-80">
         <StarCanvas density={70} />
       </motion.div>

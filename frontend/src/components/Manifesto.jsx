@@ -1,38 +1,38 @@
-import { Reveal, Eyebrow } from "./Reveal";
+import { Reveal } from "./Reveal";
 import { useLang } from "../i18n";
 
 export default function Manifesto() {
   const { t } = useLang();
   return (
-    <section className="py-24 sm:py-32" data-testid="manifesto-section">
+    <section className="py-16 sm:py-20" data-testid="manifesto-section">
       <div className="max-w-7xl mx-auto px-6 sm:px-10">
         <Reveal>
-          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl tracking-tight leading-tight text-charcoal max-w-3xl">
+          <h2 className="font-deco text-2xl sm:text-3xl lg:text-4xl tracking-wide leading-tight text-charcoal max-w-3xl uppercase">
             {t.manifesto.title}
           </h2>
         </Reveal>
-        <div className="mt-16 sm:mt-20">
+        <div className="mt-10 sm:mt-12">
           {t.manifesto.chapters.map((ch, i) => (
             <Reveal key={ch.n} delay={0.05}>
               <div
                 data-testid={`manifesto-chapter-${i}`}
-                className={`grid sm:grid-cols-12 gap-4 sm:gap-8 py-10 sm:py-14 border-t border-charcoal/10 ${i % 2 === 1 ? "sm:text-right" : ""}`}
+                className={`grid sm:grid-cols-12 gap-3 sm:gap-8 py-6 sm:py-8 border-t border-charcoal/10 ${i % 2 === 1 ? "sm:text-right" : ""}`}
               >
                 <div className={`sm:col-span-3 ${i % 2 === 1 ? "sm:order-3" : ""}`}>
-                  <span className="font-serif italic text-5xl sm:text-7xl text-champagne/60">{ch.n}</span>
+                  <span className="font-deco text-4xl sm:text-5xl text-champagne/70">{ch.n}</span>
                 </div>
                 <div className="sm:col-span-4">
-                  <h3 className="font-serif text-2xl sm:text-3xl leading-snug text-charcoal">{ch.h}</h3>
+                  <h3 className="font-deco text-lg sm:text-xl tracking-wide leading-snug text-charcoal uppercase">{ch.h}</h3>
                 </div>
                 <div className="sm:col-span-5">
-                  <p className="text-smoke leading-relaxed text-base sm:text-lg">{ch.p}</p>
+                  <p className="text-smoke leading-relaxed text-sm sm:text-base">{ch.p}</p>
                 </div>
               </div>
             </Reveal>
           ))}
         </div>
-        <Reveal className="mt-14 sm:mt-20 text-center">
-          <p className="font-serif italic text-2xl sm:text-3xl text-gold" data-testid="manifesto-quote">
+        <Reveal className="mt-10 text-center">
+          <p className="font-serif italic text-xl sm:text-2xl text-gold" data-testid="manifesto-quote">
             “{t.manifesto.quote}”
           </p>
         </Reveal>

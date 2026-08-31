@@ -10,6 +10,7 @@ module.exports = {
       fontFamily: {
         serif: ['"Playfair Display"', 'Georgia', 'serif'],
         sans: ['Manrope', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        deco: ['Cinzel', 'Georgia', 'serif'],
       },
       colors: {
         ivory: '#FDFBF7',

@@ -1,4 +1,5 @@
 import { createContext, useCallback, useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Lenis from "lenis";
 import "@/App.css";
 import { LanguageProvider } from "./i18n";
@@ -18,11 +19,12 @@ import FinalCTA from "./components/FinalCTA";
 import Footer from "./components/Footer";
 import BookingModal from "./components/BookingModal";
 import StickyCTA from "./components/StickyCTA";
+import Admin from "./pages/Admin";
 import { Toaster } from "./components/ui/sonner";
 
 export const BookingContext = createContext({ openBooking: () => {} });
 
-function App() {
+function Landing() {
   const [modal, setModal] = useState({ open: false, pkg: "consultation" });
   const openBooking = useCallback((pkg = "consultation") => setModal({ open: true, pkg }), []);
   const closeBooking = useCallback(() => setModal((m) => ({ ...m, open: false })), []);
@@ -37,30 +39,41 @@ function App() {
   }, []);
 
   return (
+    <BookingContext.Provider value={{ openBooking }}>
+      <div className="App grain">
+        <Navbar />
+        <main>
+          <Hero />
+          <Marquee />
+          <FinalCTA />
+          <Astrologer />
+          <Manifesto />
+          <WhyUs />
+          <AskTopics />
+          <HowItWorks />
+          <Consultation />
+          <Blueprint />
+          <Gemstones />
+          <Testimonials />
+        </main>
+        <Footer />
+        <StickyCTA />
+        <BookingModal open={modal.open} pkg={modal.pkg} onClose={closeBooking} />
+        <Toaster position="top-center" />
+      </div>
+    </BookingContext.Provider>
+  );
+}
+
+function App() {
+  return (
     <LanguageProvider>
-      <BookingContext.Provider value={{ openBooking }}>
-        <div className="App grain">
-          <Navbar />
-          <main>
-            <Hero />
-            <Marquee />
-            <Manifesto />
-            <WhyUs />
-            <AskTopics />
-            <HowItWorks />
-            <Consultation />
-            <Blueprint />
-            <Gemstones />
-            <Testimonials />
-            <Astrologer />
-            <FinalCTA />
-          </main>
-          <Footer />
-          <StickyCTA />
-          <BookingModal open={modal.open} pkg={modal.pkg} onClose={closeBooking} />
-          <Toaster position="top-center" />
-        </div>
-      </BookingContext.Provider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/admin" element={<Admin />} />
+        </Routes>
+      </BrowserRouter>
     </LanguageProvider>
   );
 }

@@ -1,7 +1,7 @@
 import { Reveal, Eyebrow } from "./Reveal";
 import { useLang } from "../i18n";
 
-const PORTRAIT = "https://images.unsplash.com/photo-1603796868286-f684c57d3cee?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwzfHxlbGRlcmx5JTIwaW5kaWFuJTIwbWFuJTIwcG9ydHJhaXQlMjB3YXJtJTIwY2FsbXxlbnwwfHx8fDE3ODgyMDYwNDd8MA&ixlib=rb-4.1.0&q=85";
+const DESTINY_IMG = "https://images.unsplash.com/photo-1429305336325-b84ace7eba3b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwzfHxzdWJ0bGUlMjBuaWdodCUyMHNreSUyMHN0YXJzJTIwdGV4dHVyZSUyMGxpZ2h0fGVufDB8fHx8MTc4ODIwNjA0N3ww&ixlib=rb-4.1.0&q=85";
 
 export default function Astrologer() {
   const { t } = useLang();
@@ -11,8 +11,12 @@ export default function Astrologer() {
         <div className="grid lg:grid-cols-2 gap-14 items-center">
           <Reveal>
             <div className="relative max-w-md">
-              <div className="rounded-t-[10rem] rounded-b-2xl overflow-hidden shadow-[0_24px_60px_rgba(0,0,0,0.10)]">
-                <img src={PORTRAIT} alt={t.astrologer.name} className="w-full h-[420px] sm:h-[500px] object-cover" loading="lazy" data-testid="astrologer-portrait" />
+              <div className="rounded-t-[10rem] rounded-b-2xl overflow-hidden shadow-[0_24px_60px_rgba(0,0,0,0.10)] relative">
+                <img src={DESTINY_IMG} alt="A sky of stars — destiny" className="w-full h-[420px] sm:h-[500px] object-cover" loading="lazy" data-testid="astrologer-destiny-image" />
+                <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/10 to-transparent" />
+                <p className="absolute bottom-6 left-6 right-6 font-serif italic text-xl sm:text-2xl text-ivory leading-snug" data-testid="astrologer-trust-line">
+                  {t.astrologer.trust}
+                </p>
               </div>
               <span className="absolute -top-4 -right-4 w-24 h-24 rounded-full border border-gold/40 pointer-events-none" aria-hidden="true" />
             </div>

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Star, Gift } from "lucide-react";
+import { Star } from "lucide-react";
 import { Reveal, Eyebrow } from "./Reveal";
 import { useLang } from "../i18n";
 
@@ -34,18 +34,6 @@ export default function Testimonials() {
             </Reveal>
           ))}
         </div>
-        <Reveal className="mt-10">
-          <div data-testid="referral-band" className="rounded-2xl border border-gold/30 bg-ivory px-8 py-8 sm:px-12 flex flex-col sm:flex-row sm:items-center gap-6">
-            <span className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gold/10 text-gold shrink-0">
-              <Gift size={22} strokeWidth={1.5} />
-            </span>
-            <div>
-              <h3 className="font-serif text-2xl text-charcoal">{t.testimonials.referralH}</h3>
-              <p className="mt-2 text-smoke text-sm sm:text-base leading-relaxed">{t.testimonials.referralP}</p>
-              <p className="mt-1 text-xs text-smoke/60 italic">{t.testimonials.referralNote}</p>
-            </div>
-          </div>
-        </Reveal>
       </div>
     </section>
   );

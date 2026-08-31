@@ -20,30 +20,27 @@ India's first one-on-one quick personal astrology guidance. ₹99 for a 20-minut
 5. EN | हिंदी language switcher (header + footer).
 
 ## Implemented (2026-08-31)
-- Full landing page, all sections above, with design-system (Playfair Display + Manrope, ivory/champagne/charcoal).
-- Backend: `POST /api/bookings` (consultation ₹99 / blueprint ₹149), `POST /api/bookings/verify` (HMAC signature check), `GET /api/config`, `GET /api/bookings`, `GET /api/` health.
-- Razorpay Checkout (TEST mode keys) wired end-to-end: backend creates a real Razorpay order, frontend opens hosted checkout, payment signature verified server-side, booking marked paid. Verified: real test order created, valid signature accepted, bad signature rejected (400).
-- Email via Emergent-managed Resend: customer confirmation email + owner alert email (to swapnagemsexports@gmail.com) fire automatically after successful payment. Verified: 202 Accepted from email proxy. Server-side templates, guardrail gate on every send.
-- Booking modal end-to-end with booking reference ID on success.
-- Full Hindi translation coverage of all page copy.
+- Full landing page with design-system (Playfair Display + Cinzel deco + Manrope, ivory/champagne/charcoal).
+- Visual-edit pass: page order Hero → Marquee → FinalCTA ("Feeling stuck?") → Astrologer (destiny star image + trust tagline, portrait removed) → Manifesto (Cinzel deco font, short direct copy) → WhyUs → AskTopics (compact 4-col) → HowItWorks (heading removed, compact) → Consultation → Blueprint → Gemstones → Testimonials (reviews only, "Our feedbacks" tag, referral band removed).
+- Backend: `POST /api/bookings`, `POST /api/bookings/verify` (HMAC check), `GET /api/config`, `GET /api/bookings` (JWT-protected), `PATCH /api/bookings/{id}/status` (JWT-protected), `POST /api/admin/login`, `GET /api/` health.
+- Admin dashboard at /admin: password login (JWT 12h), bookings list with refs, paid/status badges, WhatsApp deep-link per booking, mark confirmed/completed/cancelled. Password: Nakshatra@4821.
+- Razorpay Checkout (TEST mode) end-to-end with server-side signature verification.
+- Email via Emergent-managed Resend: customer confirmation + owner alert (swapnagemsexports@gmail.com) after successful payment.
+- Full Hindi translation coverage.
 
 ## Placeholders to replace before launch
-- Razorpay keys are TEST keys (rzp_test_TWVPuJ9eltbDD6) — swap in LIVE keys in backend/.env to collect real money
-- Phone/WhatsApp: +91 99999 99999 (footer, WhatsApp links) — still placeholder, user skipped
+- Razorpay keys are TEST (rzp_test_TWVPuJ9eltbDD6) — swap LIVE keys in backend/.env
+- Phone/WhatsApp: +91 99999 99999 — still placeholder, user skipped
 - Instagram: @astronakshatra — placeholder, user skipped
-- Testimonials: sample quotes from brief (replace with verified reviews)
-- Astrologer portrait: stock photo (replace with real photo of Shri Rajendra Kumar Gupta)
-
-## Contact / config in use
-- Owner alert + reply-to email: swapnagemsexports@gmail.com
-- Site URL: https://astro-nakshatra-1.preview.emergentagent.com
+- Testimonials: sample quotes from brief
+- Admin password Nakshatra@4821 — user may change
 
 ## Backlog (prioritized)
-- P0: Swap Razorpay TEST → LIVE keys; replace placeholder phone/WhatsApp/Instagram with real details.
-- P1: Admin view for bookings (simple password-protected list); slot capacity counter tied to real availability; Razorpay webhook for payment state reconciliation.
-- P2: Privacy/Terms pages; real verified reviews feed; referral tracking codes; WhatsApp Business API alerts.
+- P0: Razorpay TEST → LIVE keys; real phone/WhatsApp/Instagram details.
+- P1: Slot capacity counter tied to real availability; Razorpay webhook reconciliation.
+- P2: Privacy/Terms pages; real verified reviews; referral tracking; WhatsApp Business API alerts.
 
 ## Next Tasks
-1. Swap Razorpay live keys + update placeholder contact details.
-2. Password-protect /api/bookings or build a small admin view.
-3. Replace testimonial quotes + astrologer portrait with real assets.
+1. Swap Razorpay live keys + update contact details (awaiting user values).
+2. Add real verified reviews.
+3. WhatsApp Business API alerts.
