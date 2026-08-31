@@ -21,24 +21,29 @@ India's first one-on-one quick personal astrology guidance. ₹99 for a 20-minut
 
 ## Implemented (2026-08-31)
 - Full landing page, all sections above, with design-system (Playfair Display + Manrope, ivory/champagne/charcoal).
-- Backend: `POST /api/bookings` (consultation ₹99 / blueprint ₹149, status pending_confirmation), `GET /api/bookings`, `GET /api/` health.
+- Backend: `POST /api/bookings` (consultation ₹99 / blueprint ₹149), `POST /api/bookings/verify` (HMAC signature check), `GET /api/config`, `GET /api/bookings`, `GET /api/` health.
+- Razorpay Checkout (TEST mode keys) wired end-to-end: backend creates a real Razorpay order, frontend opens hosted checkout, payment signature verified server-side, booking marked paid. Verified: real test order created, valid signature accepted, bad signature rejected (400).
+- Email via Emergent-managed Resend: customer confirmation email + owner alert email (to swapnagemsexports@gmail.com) fire automatically after successful payment. Verified: 202 Accepted from email proxy. Server-side templates, guardrail gate on every send.
 - Booking modal end-to-end with booking reference ID on success.
-- Payment step is MOCKED (no real charge; `payment_status: mock_paid`).
 - Full Hindi translation coverage of all page copy.
 
 ## Placeholders to replace before launch
-- Phone/WhatsApp: +91 99999 99999 (footer, WhatsApp links)
-- Email: care@astronakshatra.in
-- Instagram: @astronakshatra
+- Razorpay keys are TEST keys (rzp_test_TWVPuJ9eltbDD6) — swap in LIVE keys in backend/.env to collect real money
+- Phone/WhatsApp: +91 99999 99999 (footer, WhatsApp links) — still placeholder, user skipped
+- Instagram: @astronakshatra — placeholder, user skipped
 - Testimonials: sample quotes from brief (replace with verified reviews)
 - Astrologer portrait: stock photo (replace with real photo of Shri Rajendra Kumar Gupta)
 
+## Contact / config in use
+- Owner alert + reply-to email: swapnagemsexports@gmail.com
+- Site URL: https://astro-nakshatra-1.preview.emergentagent.com
+
 ## Backlog (prioritized)
-- P0: Real payment gateway (Razorpay) for ₹99/₹149; real WhatsApp/email confirmation sending (Resend + WhatsApp Business).
-- P1: Admin view for bookings (simple password-protected list); slot capacity counter tied to real availability.
-- P2: Privacy/Terms pages; real verified reviews feed; referral tracking codes.
+- P0: Swap Razorpay TEST → LIVE keys; replace placeholder phone/WhatsApp/Instagram with real details.
+- P1: Admin view for bookings (simple password-protected list); slot capacity counter tied to real availability; Razorpay webhook for payment state reconciliation.
+- P2: Privacy/Terms pages; real verified reviews feed; referral tracking codes; WhatsApp Business API alerts.
 
 ## Next Tasks
-1. Wire Razorpay checkout into booking modal step 4.
-2. Add email confirmation via Resend + WhatsApp deep-link notification to the team.
-3. Replace placeholder contact details + astrologer portrait with real assets.
+1. Swap Razorpay live keys + update placeholder contact details.
+2. Password-protect /api/bookings or build a small admin view.
+3. Replace testimonial quotes + astrologer portrait with real assets.

@@ -1,16 +1,21 @@
-from fastapi import FastAPI, APIRouter, HTTPException
-from dotenv import load_dotenv
-from starlette.middleware.cors import CORSMiddleware
-from motor.motor_asyncio import AsyncIOMotorClient
-import os
+import asyncio
 import logging
+import os
 import uuid
-from pathlib import Path
-from pydantic import BaseModel, EmailStr
 from datetime import datetime, timezone
+from pathlib import Path
+
+from dotenv import load_dotenv
+from fastapi import FastAPI, APIRouter, HTTPException
+from motor.motor_asyncio import AsyncIOMotorClient
+from pydantic import BaseModel, EmailStr
+from starlette.middleware.cors import CORSMiddleware
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
+
+from payments import is_configured, create_order, verify_signature, get_key_id
+from emails import send_booking_emails
 
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
@@ -35,26 +40,79 @@ class BookingCreate(BaseModel):
     package: str = "consultation"
 
 
+class PaymentVerify(BaseModel):
+    booking_id: str
+    razorpay_order_id: str
+    razorpay_payment_id: str
+    razorpay_signature: str
+
+
 @api_router.get("/")
 async def root():
     return {"message": "Astro Nakshatra API"}
+
+
+@api_router.get("/config")
+async def config():
+    return {"payments_enabled": is_configured()}
 
 
 @api_router.post("/bookings", status_code=201)
 async def create_booking(input: BookingCreate):
     if input.package not in PACKAGES:
         raise HTTPException(status_code=400, detail="Unknown package")
+    payments_on = is_configured()
     doc = input.model_dump()
     doc.update({
         "id": str(uuid.uuid4()),
         "amount": PACKAGES[input.package],
-        "status": "pending_confirmation",
-        "payment_status": "mock_paid",
+        "status": "payment_pending" if payments_on else "pending_confirmation",
+        "payment_status": "unpaid" if payments_on else "mock_paid",
         "created_at": datetime.now(timezone.utc).isoformat(),
     })
     await db.bookings.insert_one(doc)
     doc.pop("_id", None)
-    return doc
+
+    if payments_on:
+        try:
+            order = await asyncio.to_thread(create_order, PACKAGES[input.package], doc["id"])
+        except Exception as e:
+            logging.getLogger(__name__).error(f"Razorpay order creation failed: {e}")
+            raise HTTPException(status_code=502, detail="Could not initiate payment")
+        await db.bookings.update_one({"id": doc["id"]}, {"$set": {"razorpay_order_id": order["id"]}})
+        return {
+            "booking": doc,
+            "payments_enabled": True,
+            "key_id": get_key_id(),
+            "order": {"id": order["id"], "amount": order["amount"], "currency": order["currency"]},
+        }
+    return {"booking": doc, "payments_enabled": False}
+
+
+@api_router.post("/bookings/verify")
+async def verify_booking_payment(input: PaymentVerify):
+    booking = await db.bookings.find_one({"id": input.booking_id}, {"_id": 0})
+    if not booking:
+        raise HTTPException(status_code=404, detail="Booking not found")
+    if booking.get("razorpay_order_id") != input.razorpay_order_id:
+        raise HTTPException(status_code=400, detail="Order mismatch")
+    ok = await asyncio.to_thread(
+        verify_signature,
+        input.razorpay_order_id,
+        input.razorpay_payment_id,
+        input.razorpay_signature,
+    )
+    if not ok:
+        raise HTTPException(status_code=400, detail="Payment verification failed")
+    updates = {
+        "payment_status": "paid",
+        "status": "pending_confirmation",
+        "razorpay_payment_id": input.razorpay_payment_id,
+    }
+    await db.bookings.update_one({"id": input.booking_id}, {"$set": updates})
+    booking.update(updates)
+    asyncio.create_task(send_booking_emails(booking))
+    return {"booking": booking}
 
 
 @api_router.get("/bookings")

@@ -1,10 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, ArrowLeft, ArrowRight, Loader2, BadgeCheck } from "lucide-react";
 import { toast } from "sonner";
 import { useLang } from "../i18n";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+
+const loadRazorpay = () => new Promise((resolve) => {
+  if (window.Razorpay) return resolve(true);
+  const s = document.createElement("script");
+  s.src = "https://checkout.razorpay.com/v1/checkout.js";
+  s.onload = () => resolve(true);
+  s.onerror = () => resolve(false);
+  document.body.appendChild(s);
+});
 
 const inputCls = "w-full rounded-xl border border-charcoal/15 bg-ivory px-4 py-3 text-sm text-charcoal placeholder:text-smoke/50 focus:border-gold transition-colors";
 
@@ -22,10 +31,19 @@ export default function BookingModal({ open, pkg, onClose }) {
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState(null);
+  const [paymentsEnabled, setPaymentsEnabled] = useState(false);
   const [form, setForm] = useState({
     full_name: "", dob: "", birth_time: "", birth_place: "",
     questions: "", preferred_day: "", preferred_time: "", email: "", phone: "",
   });
+
+  useEffect(() => {
+    if (!open) return;
+    fetch(`${API}/config`)
+      .then((r) => r.json())
+      .then((d) => setPaymentsEnabled(!!d.payments_enabled))
+      .catch(() => {});
+  }, [open]);
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
@@ -50,7 +68,46 @@ export default function BookingModal({ open, pkg, onClose }) {
       });
       if (!res.ok) throw new Error("booking failed");
       const data = await res.json();
-      setResult(data);
+
+      if (!data.payments_enabled) {
+        setResult(data.booking);
+        return;
+      }
+
+      const loaded = await loadRazorpay();
+      if (!loaded) throw new Error("checkout failed to load");
+
+      const rzp = new window.Razorpay({
+        key: data.key_id,
+        amount: data.order.amount,
+        currency: data.order.currency,
+        name: "Astro Nakshatra",
+        description: pkg === "blueprint" ? "Astral Blueprint" : "20-minute personal consultation",
+        order_id: data.order.id,
+        prefill: { name: form.full_name, email: form.email, contact: form.phone },
+        theme: { color: "#C59B27" },
+        handler: async (resp) => {
+          try {
+            const vres = await fetch(`${API}/bookings/verify`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                booking_id: data.booking.id,
+                razorpay_order_id: resp.razorpay_order_id,
+                razorpay_payment_id: resp.razorpay_payment_id,
+                razorpay_signature: resp.razorpay_signature,
+              }),
+            });
+            if (!vres.ok) throw new Error("verify failed");
+            const vdata = await vres.json();
+            setResult(vdata.booking);
+          } catch {
+            toast.error("Payment received but confirmation failed. We will verify it manually.");
+          }
+        },
+        modal: { ondismiss: () => toast.error("Payment cancelled — your details are saved, you can try again.") },
+      });
+      rzp.open();
     } catch {
       toast.error("Something went wrong. Please try again.");
     } finally {
@@ -172,7 +229,11 @@ export default function BookingModal({ open, pkg, onClose }) {
                           <p>{form.email} · {form.phone}</p>
                         </div>
                       </div>
-                      <p className="mt-3 text-[11px] text-smoke/70 italic" data-testid="booking-pay-note">{b.payNote}</p>
+                      <p className="mt-3 text-[11px] text-smoke/70 italic" data-testid="booking-pay-note">
+                        {paymentsEnabled
+                          ? (lang === "hi" ? "Razorpay द्वारा सुरक्षित भुगतान — UPI, कार्ड, नेट बैंकिंग।" : "Secure payment via Razorpay — UPI, cards, net banking.")
+                          : b.payNote}
+                      </p>
                     </div>
                   )}
                 </motion.div>
