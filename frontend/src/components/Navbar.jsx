@@ -25,7 +25,6 @@ export default function Navbar() {
   const links = [
     { href: "#why", label: t.nav.why, id: "nav-link-why" },
     { href: "#ask", label: t.nav.ask, id: "nav-link-ask" },
-    { href: "#how", label: t.nav.how, id: "nav-link-how" },
     { href: "#astrologer", label: t.nav.astrologer, id: "nav-link-astrologer" },
   ];
   return (

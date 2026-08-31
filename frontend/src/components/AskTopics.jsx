@@ -1,20 +1,29 @@
 import { motion } from "framer-motion";
 import { Briefcase, Heart, Users, Coins, HeartPulse, Compass, Gem } from "lucide-react";
-import { Reveal, Eyebrow } from "./Reveal";
+import { Reveal } from "./Reveal";
 import { useLang } from "../i18n";
 
 const icons = [Briefcase, Heart, Users, Coins, HeartPulse, Compass, Gem];
+const STAR_BG = "https://images.unsplash.com/photo-1429305336325-b84ace7eba3b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwzfHxzdWJ0bGUlMjBuaWdodCUyMHNreSUyMHN0YXJzJTIwdGV4dHVyZSUyMGxpZ2h0fGVufDB8fHx8MTc4ODIwNjA0N3ww&ixlib=rb-4.1.0&q=85";
 
 export default function AskTopics() {
   const { t } = useLang();
   return (
-    <section id="ask" className="py-16 sm:py-20" data-testid="ask-section">
+    <section id="ask" className="py-14 sm:py-16" data-testid="ask-section">
       <div className="max-w-7xl mx-auto px-6 sm:px-10">
         <Reveal>
-          <Eyebrow>{t.ask.eyebrow}</Eyebrow>
-          <h2 className="font-serif text-3xl sm:text-4xl tracking-tight leading-tight text-charcoal max-w-3xl">{t.ask.title}</h2>
+          <div className="relative rounded-2xl overflow-hidden border border-gold/20">
+            <img src={STAR_BG} alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover opacity-30" loading="lazy" />
+            <div className="absolute inset-0 bg-gradient-to-b from-ivory/70 via-ivory/40 to-ivory/85" />
+            <div className="relative px-6 py-12 sm:py-14 text-center">
+              <p className="font-deco text-3xl sm:text-4xl lg:text-5xl tracking-wide text-charcoal" data-testid="ask-eyebrow-big">
+                {t.ask.eyebrow}
+              </p>
+              <h2 className="mt-3 text-xs sm:text-sm uppercase tracking-[0.25em] text-smoke font-semibold">{t.ask.title}</h2>
+            </div>
+          </div>
         </Reveal>
-        <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {t.ask.topics.map((topic, i) => {
             const Icon = icons[i];
             return (
@@ -23,7 +32,7 @@ export default function AskTopics() {
                   whileHover={{ y: -4 }}
                   transition={{ duration: 0.4 }}
                   data-testid={`topic-card-${i}`}
-                  className="h-full bg-cream/60 border border-charcoal/8 rounded-2xl p-6 group"
+                  className="h-full bg-cream/60 border border-charcoal/8 rounded-2xl p-5 group"
                 >
                   <span className="inline-flex items-center justify-center w-10 h-10 rounded-full border border-gold/30 text-gold group-hover:bg-gold group-hover:text-ivory transition-colors duration-300">
                     <Icon size={17} strokeWidth={1.5} />
@@ -35,7 +44,7 @@ export default function AskTopics() {
             );
           })}
           <Reveal delay={0.08}>
-            <div className="h-full rounded-2xl border border-dashed border-gold/40 p-6 flex flex-col justify-center bg-ivory" data-testid="topic-card-anything">
+            <div className="h-full rounded-2xl border border-dashed border-gold/40 p-5 flex flex-col justify-center bg-ivory" data-testid="topic-card-anything">
               <p className="font-serif italic text-lg text-gold leading-snug">“You ask. We listen. We guide.”</p>
             </div>
           </Reveal>

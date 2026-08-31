@@ -9,13 +9,10 @@ import Marquee from "./components/Marquee";
 import Manifesto from "./components/Manifesto";
 import WhyUs from "./components/WhyUs";
 import AskTopics from "./components/AskTopics";
-import HowItWorks from "./components/HowItWorks";
 import Consultation from "./components/Consultation";
 import Blueprint from "./components/Blueprint";
-import Gemstones from "./components/Gemstones";
 import Testimonials from "./components/Testimonials";
 import Astrologer from "./components/Astrologer";
-import FinalCTA from "./components/FinalCTA";
 import Footer from "./components/Footer";
 import BookingModal from "./components/BookingModal";
 import StickyCTA from "./components/StickyCTA";
@@ -45,15 +42,12 @@ function Landing() {
         <main>
           <Hero />
           <Marquee />
-          <FinalCTA />
           <Astrologer />
           <Manifesto />
           <WhyUs />
           <AskTopics />
-          <HowItWorks />
           <Consultation />
           <Blueprint />
-          <Gemstones />
           <Testimonials />
         </main>
         <Footer />

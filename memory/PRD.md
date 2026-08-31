@@ -21,7 +21,8 @@ India's first one-on-one quick personal astrology guidance. ₹99 for a 20-minut
 
 ## Implemented (2026-08-31)
 - Full landing page with design-system (Playfair Display + Cinzel deco + Manrope, ivory/champagne/charcoal).
-- Visual-edit pass: page order Hero → Marquee → FinalCTA ("Feeling stuck?") → Astrologer (destiny star image + trust tagline, portrait removed) → Manifesto (Cinzel deco font, short direct copy) → WhyUs → AskTopics (compact 4-col) → HowItWorks (heading removed, compact) → Consultation → Blueprint → Gemstones → Testimonials (reviews only, "Our feedbacks" tag, referral band removed).
+- Visual-edit pass 2: Hero merged with FinalCTA ("Feeling stuck?" headline + gold italic subline + small artistic deco tagline + restyled trust row); Astrologer now landscape destiny image with "It's not a coincidence you're here." + short bio + animated count-up stats; Manifesto compressed to a small bordered box of one-liners; WhyUs compact (small title, landscape hands image, short card copy); AskTopics header is a big centered "We majorly help in" over a star background image; HowItWorks and Gemstones sections removed entirely; nav links trimmed.
+- Visual-edit pass 1: page order, Cinzel deco font, testimonials reviews-only.
 - Backend: `POST /api/bookings`, `POST /api/bookings/verify` (HMAC check), `GET /api/config`, `GET /api/bookings` (JWT-protected), `PATCH /api/bookings/{id}/status` (JWT-protected), `POST /api/admin/login`, `GET /api/` health.
 - Admin dashboard at /admin: password login (JWT 12h), bookings list with refs, paid/status badges, WhatsApp deep-link per booking, mark confirmed/completed/cancelled. Password: Nakshatra@4821.
 - Razorpay Checkout (TEST mode) end-to-end with server-side signature verification.

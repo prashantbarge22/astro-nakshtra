@@ -54,28 +54,39 @@ export default function Hero() {
         ))}
       </motion.svg>
 
-      <motion.div style={{ y: textY, opacity: fade }} className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 pt-28 pb-20 w-full">
+      <motion.div style={{ y: textY, opacity: fade }} className="relative z-10 max-w-4xl mx-auto px-6 sm:px-10 pt-28 pb-20 w-full text-center">
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.8 }}
-          className="text-[11px] sm:text-xs uppercase tracking-[0.3em] font-semibold text-gold mb-8 max-w-md"
+          className="text-[11px] sm:text-xs uppercase tracking-[0.3em] font-semibold text-gold mb-8"
           data-testid="hero-eyebrow"
         >
           {t.hero.eyebrow}
         </motion.p>
 
         <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl leading-[1.12] tracking-tight text-charcoal" data-testid="hero-heading">
-          <MaskedLine delay={0.25}>{t.hero.l1}</MaskedLine>
-          <MaskedLine delay={0.4} className="italic text-gold">{t.hero.l2}</MaskedLine>
-          <MaskedLine delay={0.55}>{t.hero.l3}</MaskedLine>
+          <MaskedLine delay={0.25}>{t.final.h1}</MaskedLine>
         </h1>
+        <h2 className="font-serif italic text-xl sm:text-2xl lg:text-3xl leading-snug text-gold mt-5">
+          <MaskedLine delay={0.42}>{t.final.h2}</MaskedLine>
+        </h2>
+
+        <motion.p
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.75, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-7 font-deco text-[11px] sm:text-xs uppercase tracking-[0.35em] text-smoke/80"
+          data-testid="hero-tagline"
+        >
+          {t.hero.l1.replace(/\.$/, "")} <span className="text-gold mx-1">✦</span> {t.hero.l2.replace(/\.$/, "")} <span className="text-gold mx-1">✦</span> {t.hero.l3.replace(/\.$/, "")}
+        </motion.p>
 
         <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.9, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-7 text-sm sm:text-base uppercase tracking-[0.22em] text-smoke font-medium"
+          className="mt-6 text-sm sm:text-base uppercase tracking-[0.22em] text-smoke font-medium"
           data-testid="hero-subline"
         >
           {t.hero.sub}
@@ -85,7 +96,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.05, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-10 flex flex-wrap items-center gap-5"
+          className="mt-10 flex flex-wrap items-center justify-center gap-5"
         >
           <button
             data-testid="hero-book-button"
@@ -107,19 +118,19 @@ export default function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.35, duration: 1 }}
-          className="mt-14 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-smoke"
+          className="mt-12 flex flex-wrap items-center justify-center gap-x-5 gap-y-3"
           data-testid="hero-trust-row"
         >
           <span className="flex items-center gap-2">
             <span className="flex text-champagne">
-              {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="currentColor" strokeWidth={0} />)}
+              {[...Array(5)].map((_, i) => <Star key={i} size={11} fill="currentColor" strokeWidth={0} />)}
             </span>
-            <span className="font-semibold text-charcoal">{t.hero.rating}</span>
+            <span className="text-[11px] uppercase tracking-[0.25em] font-semibold text-charcoal">{t.hero.rating}</span>
           </span>
-          <span className="hidden sm:block h-4 w-px bg-charcoal/15" />
-          <span>{t.hero.customers}</span>
-          <span className="hidden sm:block h-4 w-px bg-charcoal/15" />
-          <span>{t.hero.experience}</span>
+          <span className="h-3 w-px bg-gold/40" />
+          <span className="text-[11px] uppercase tracking-[0.25em] text-smoke">{t.hero.customers}</span>
+          <span className="h-3 w-px bg-gold/40" />
+          <span className="text-[11px] uppercase tracking-[0.25em] text-smoke">{t.hero.experience}</span>
         </motion.div>
       </motion.div>
 
