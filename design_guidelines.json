@@ -1,0 +1,123 @@
+{
+  "project_name": "Astro Nakshatra Premium Landing Page",
+  "theme": "light",
+  "design_philosophy": "Premium, calm, modern, human, subtly cinematic. An Awwwards-level site that avoids typical astrology clichés (no loud colors, glitter, or cheap zodiac icons). Focus on editorial whitespace, meaningful typography, and emotional connection.",
+  "typography": {
+    "headings": {
+      "family": "Playfair Display, serif",
+      "weights": ["400", "500", "600"],
+      "usage": "Editorial, elegant feel. Used for H1, H2, H3, and manifesto statements."
+    },
+    "body": {
+      "family": "Manrope, sans-serif",
+      "weights": ["300", "400", "500"],
+      "usage": "Highly readable, clean, modern sans-serif for body text, UI elements, and data points."
+    },
+    "scale": {
+      "h1": "text-5xl sm:text-6xl tracking-tight leading-[1.1]",
+      "h2": "text-4xl sm:text-5xl tracking-tight leading-tight",
+      "h3": "text-2xl sm:text-3xl leading-snug",
+      "body": "text-base sm:text-lg leading-relaxed text-charcoal/80",
+      "small_caps": "text-xs uppercase tracking-[0.2em] font-semibold"
+    }
+  },
+  "colors": {
+    "background": {
+      "primary": "#FDFBF7",
+      "secondary": "#F5F2EB",
+      "description": "Warm ivory / clean white, offering a calming, premium base."
+    },
+    "text": {
+      "primary": "#1A1A1A",
+      "secondary": "#4A4A4A",
+      "description": "Soft charcoal instead of harsh pure black."
+    },
+    "accent": {
+      "primary": "#D4AF37",
+      "secondary": "#C59B27",
+      "subtle": "rgba(212, 175, 55, 0.1)",
+      "description": "Champagne gold for subtle premium highlights, CTA buttons, and delicate borders."
+    }
+  },
+  "visual_enhancers": {
+    "surfaces": "Solid flat backgrounds with 1px subtle borders (border-black/5 or border-gold/20). Avoid heavy drop shadows; use delicate ambient shadows (shadow-[0_8px_32px_rgba(0,0,0,0.04)]).",
+    "image_treatment": "Spotlight effect, clipped frames (rounded-2xl or subtle arches), monochromatic or warm color grading to match the ivory/gold palette.",
+    "textures": "Subtle grain (noise) overlay on the background. Use the starry sky image with very low opacity (10-15%) blended into the hero or footer background.",
+    "icons": "lucide-react with strokeWidth={1} or 1.5. Keep them minimal. Avoid literal zodiac illustrations; use abstract geometric or soft celestial shapes."
+  },
+  "layouts": {
+    "spacing": "Generous spacing. Use py-24 or py-32 for section padding. Container padding px-6 sm:px-12.",
+    "grids": "Bento-style grids for 'Why Us' and 'What Can You Ask' sections. Asymmetrical layouts with overlapping elements for the Manifesto section.",
+    "mobile_first": "Ensure all tap targets are large. Sticky mobile CTA at the bottom of the screen. Stacked grids on mobile with smooth swipe/scroll snapping."
+  },
+  "components": {
+    "hero": "Kinetic hero section. Masked line-by-line reveal using framer-motion. Subtle parallax celestial canvas background. Large editorial typography.",
+    "buttons": "Pill-shaped (rounded-full). Primary: Champagne gold background with charcoal text. Secondary: Outline with gold/charcoal border.",
+    "limited_slots_indicator": "Small dot beside the 'BOOK NOW' CTA with a gentle pulse animation (animate-pulse, not flashing), text 'LIMITED SLOTS' in small caps.",
+    "booking_modal": "4-step flow (Name/DOB/Time/Place -> Questions -> Availability -> Confirm). Use Shadcn Dialog + Form. Clean, step-by-step UI with progress indicator.",
+    "manifesto": "Numbered chapters (01, 02, 03). Massive serif numbers with descriptive text alongside.",
+    "marquee": "Slow editorial marquee (react-fast-marquee). Text like 'CLARITY • GUIDANCE • PURPOSE • CAREER • RELATIONSHIPS' separated by small stars (✦).",
+    "language_switcher": "Minimal text toggle 'ENG | हिंदी' in the header/footer."
+  },
+  "motion": {
+    "scrolling": "Lenis smooth momentum scrolling setup in the root.",
+    "reveals": "Framer-motion scroll-reveals. Fade up and slight translate-y on scroll (duration: 0.8s, ease: [0.16, 1, 0.3, 1]).",
+    "parallax": "Subtle parallax on the hero background and gemstone images using framer-motion useScroll and useTransform.",
+    "interactions": "Hover states on cards (slight lift -translate-y-1), button scale down on tap (scale: 0.98)."
+  },
+  "image_urls": {
+    "hero_background": {
+      "url": "https://images.unsplash.com/photo-1429305336325-b84ace7eba3b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwzfHxzdWJ0bGUlMjBuaWdodCUyMHNreSUyMHN0YXJzJTIwdGV4dHVyZSUyMGxpZ2h0fGVufDB8fHx8MTc4ODIwNjA0N3ww&ixlib=rb-4.1.0&q=85",
+      "description": "Subtle starry night sky. Use with low opacity overlay in hero/footer.",
+      "category": "background"
+    },
+    "trust_hands": {
+      "url": "https://images.unsplash.com/photo-1564020435666-f67ed5319a32?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwxfHx0d28lMjBoYW5kcyUyMGdlbnRseSUyMGhvbGRpbmclMjBzdXBwb3J0JTIwdHJ1c3R8ZW58MHx8fHwxNzg4MjA2MDQ4fDA&ixlib=rb-4.1.0&q=85",
+      "description": "Two hands holding, symbolizing trust and guidance.",
+      "category": "editorial"
+    },
+    "astrologer_portrait": {
+      "url": "https://images.unsplash.com/photo-1603796868286-f684c57d3cee?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwzfHxlbGRlcmx5JTIwaW5kaWFuJTIwbWFuJTIwcG9ydHJhaXQlMjB3YXJtJTIwY2FsbXxlbnwwfHx8fDE3ODgyMDYwNDd8MA&ixlib=rb-4.1.0&q=85",
+      "description": "Warm portrait for Shri Rajendra Kumar Gupta section.",
+      "category": "portrait"
+    },
+    "gemstone_1": {
+      "url": "https://images.unsplash.com/photo-1609216970211-cc9814865e93?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzV8MHwxfHNlYXJjaHwyfHxnZW1zdG9uZSUyMG1hY3JvJTIwY3J5c3RhbHxlbnwwfHx8fDE3ODgyMDYwNTV8MA&ixlib=rb-4.1.0&q=85",
+      "description": "Purple gemstone macro shot for gemstone section.",
+      "category": "product"
+    },
+    "gemstone_2": {
+      "url": "https://images.pexels.com/photos/37955298/pexels-photo-37955298.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Blue mineral/gemstone macro shot.",
+      "category": "product"
+    }
+  },
+  "instructions_to_main_agent": [
+    "Use framer-motion heavily for the kinetic hero (masked text reveals) and scroll-triggered animations.",
+    "Implement Lenis for smooth scrolling in the main layout.",
+    "Keep the aesthetic extremely minimal and editorial. Emphasize typography and negative space.",
+    "DO NOT use generic SVG zodiac icons. Use text, spacing, and subtle shapes (like thin circles or stars: ✦) as separators.",
+    "Ensure 'BOOK NOW' is a sticky CTA on mobile, pinned to the bottom of the viewport.",
+    "Build a Shadcn-based 4-step Dialog for the booking flow.",
+    "Use standard <img> tags or Next/React image equivalents, styled with Tailwind classes like rounded-2xl or clip-paths for premium framing.",
+    "Do not use dark backgrounds globally. Stick to the Warm Ivory palette with Charcoal text and Gold accents."
+  ],
+  "accessibility": {
+    "contrast": "Ensure soft charcoal text on ivory background meets WCAG AA standards.",
+    "motion": "Respect prefers-reduced-motion for the parallax and kinetic reveals.",
+    "interactive": "All CTAs, inputs, and the booking modal must have explicit focus states (focus-visible:ring-2 focus-visible:ring-gold) and data-testid attributes."
+  },
+  "testing": {
+    "data_testids": "All interactive elements MUST include data-testid (e.g., 'book-now-button', 'booking-modal-step-1', 'faq-accordion')."
+  },
+  "universal_guidelines_for_main_agent": [
+    "Avoid the 'AI slop' aesthetic: no generic centered layouts, simplistic gradients, or uniform styling.",
+    "Create depth with layered elements and z-index hierarchy.",
+    "Do NOT apply global transitions like 'transition: all'. Add specific transitions (e.g., 'transition-colors', 'transition-transform').",
+    "Do NOT center align the app container (.App { text-align: center; }). Keep text left-aligned for natural reading.",
+    "Use modern button styles (pill-shaped or sharp) with interaction animations.",
+    "NEVER use emojis (🤖🧠💭💡🔮🎯) as icons. Use lucide-react.",
+    "Use 2-3x more spacing (p-12 to p-24) to create a premium, un-cramped feel.",
+    "NEVER use placeholder images. Rely on the provided image_urls."
+  ]
+}
