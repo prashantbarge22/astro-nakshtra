@@ -1,13 +1,16 @@
+import { useContext } from "react";
 import { motion } from "framer-motion";
 import { Briefcase, Heart, Users, Coins, HeartPulse, Compass, Gem } from "lucide-react";
 import { Reveal } from "./Reveal";
 import { useLang } from "../i18n";
+import { BookingContext } from "../App";
 
 const icons = [Briefcase, Heart, Users, Coins, HeartPulse, Compass, Gem];
 const STAR_BG = "https://images.unsplash.com/photo-1429305336325-b84ace7eba3b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwzfHxzdWJ0bGUlMjBuaWdodCUyMHNreSUyMHN0YXJzJTIwdGV4dHVyZSUyMGxpZ2h0fGVufDB8fHx8MTc4ODIwNjA0N3ww&ixlib=rb-4.1.0&q=85";
 
 export default function AskTopics() {
   const { t } = useLang();
+  const { openBooking } = useContext(BookingContext);
   return (
     <section id="ask" className="py-14 sm:py-16" data-testid="ask-section">
       <div className="max-w-7xl mx-auto px-6 sm:px-10">
@@ -44,8 +47,16 @@ export default function AskTopics() {
             );
           })}
           <Reveal delay={0.08}>
-            <div className="h-full rounded-2xl border border-dashed border-gold/40 p-5 flex flex-col justify-center bg-ivory" data-testid="topic-card-anything">
-              <p className="font-serif italic text-lg text-gold leading-snug">“You ask. We listen. We guide.”</p>
+            <div className="h-full rounded-2xl bg-charcoal text-ivory p-5 flex flex-col justify-center gap-3" data-testid="topic-card-reminder">
+              <p className="font-serif italic text-lg leading-snug">{t.v3.remindTitle}</p>
+              <p className="text-ivory/60 text-sm leading-relaxed">{t.v3.remindLine}</p>
+              <button
+                data-testid="ask-book-button"
+                onClick={() => openBooking("consultation")}
+                className="mt-1 w-fit rounded-full bg-champagne text-charcoal text-sm font-semibold px-5 py-2.5 hover:bg-gold transition-colors active:scale-[0.98]"
+              >
+                {t.nav.book}
+              </button>
             </div>
           </Reveal>
         </div>

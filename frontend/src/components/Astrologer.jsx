@@ -1,28 +1,7 @@
-import { useEffect, useRef, useState } from "react";
-import { animate, useInView } from "framer-motion";
-import { Reveal, Eyebrow } from "./Reveal";
+import { Reveal, Eyebrow, CountUp } from "./Reveal";
 import { useLang } from "../i18n";
 
 const DESTINY_IMG = "https://images.unsplash.com/photo-1429305336325-b84ace7eba3b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwzfHxzdWJ0bGUlMjBuaWdodCUyMHNreSUyMHN0YXJzJTIwdGV4dHVyZSUyMGxpZ2h0fGVufDB8fHx8MTc4ODIwNjA0N3ww&ixlib=rb-4.1.0&q=85";
-
-const CountUp = ({ value }) => {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-40px" });
-  const numeric = parseFloat(value.replace(/,/g, ""));
-  const suffix = value.includes("+") ? "+" : "";
-  const decimals = value.includes(".") ? 1 : 0;
-  const [display, setDisplay] = useState("0");
-  useEffect(() => {
-    if (!inView) return;
-    const controls = animate(0, numeric, {
-      duration: 1.6,
-      ease: [0.16, 1, 0.3, 1],
-      onUpdate: (v) => setDisplay(decimals ? v.toFixed(1) : Math.round(v).toLocaleString("en-IN")),
-    });
-    return () => controls.stop();
-  }, [inView, numeric, decimals]);
-  return <span ref={ref}>{display}{suffix}</span>;
-};
 
 export default function Astrologer() {
   const { t } = useLang();

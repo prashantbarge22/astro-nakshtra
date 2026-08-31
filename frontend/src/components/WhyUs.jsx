@@ -10,8 +10,10 @@ export default function WhyUs() {
     <section id="why" className="py-16 sm:py-20 bg-cream/50" data-testid="why-us-section">
       <div className="max-w-7xl mx-auto px-6 sm:px-10">
         <Reveal>
-          <Eyebrow>{t.why.eyebrow}</Eyebrow>
-          <h2 className="font-serif text-2xl sm:text-3xl tracking-tight leading-snug text-charcoal max-w-xl">{t.why.title}</h2>
+          <div className="text-center max-w-2xl mx-auto">
+            <p className="font-deco text-2xl sm:text-3xl tracking-wide text-gold mb-3">{t.why.eyebrow}</p>
+            <h2 className="font-serif text-lg sm:text-xl leading-snug text-charcoal">{t.why.title}</h2>
+          </div>
         </Reveal>
         <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <Reveal className="sm:col-span-2">

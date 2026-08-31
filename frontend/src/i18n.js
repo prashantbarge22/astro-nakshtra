@@ -171,6 +171,18 @@ const en = {
     required: "Please fill all required fields.",
   },
   sticky: { cta: "Book now — ₹99", limited: "Limited slots today" },
+  v3: {
+    trustLine: "Trusted, honest guidance from a real human who listens.",
+    notifyBooked: "just booked a ₹99 slot",
+    notifyBlueprint: "got their Astral Blueprint",
+    from: "from",
+    remindTitle: "Still thinking it over?",
+    remindLine: "Your question deserves an answer today — slots are limited each day.",
+    bpTitle: "Get your life blueprint",
+    bpLine: "Serious facts about you — the ones you never thought to ask.",
+    liveLabel: "Slots booked till date",
+    liveNote: "Live — updates as bookings come in",
+  },
 };
 
 const hi = {
@@ -344,6 +356,18 @@ const hi = {
     required: "कृपया सभी आवश्यक फ़ील्ड भरें।",
   },
   sticky: { cta: "अभी बुक करें — ₹99", limited: "आज सीमित स्लॉट" },
+  v3: {
+    trustLine: "भरोसेमंद, ईमानदार मार्गदर्शन — एक असली इंसान से जो सच में सुनता है।",
+    notifyBooked: "ने अभी ₹99 स्लॉट बुक किया",
+    notifyBlueprint: "ने अपना एस्ट्रल ब्लूप्रिंट लिया",
+    from: "से",
+    remindTitle: "अभी भी सोच रहे हैं?",
+    remindLine: "आपके सवाल का जवाब आज ही मिलना चाहिए — रोज़ सीमित स्लॉट।",
+    bpTitle: "अपनी लाइफ़ ब्लूप्रिंट पाएं",
+    bpLine: "आपके बारे में गंभीर तथ्य — जो आपने कभी पूछे ही नहीं।",
+    liveLabel: "अब तक बुक किए गए स्लॉट",
+    liveNote: "लाइव — बुकिंग आते ही अपडेट",
+  },
 };
 
 const translations = { en, hi };

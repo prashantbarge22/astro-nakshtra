@@ -58,6 +58,12 @@ async def config():
     return {"payments_enabled": is_configured()}
 
 
+@api_router.get("/stats")
+async def stats():
+    count = await db.bookings.count_documents({"payment_status": {"$in": ["paid", "mock_paid"]}})
+    return {"slots_booked": count}
+
+
 @api_router.post("/bookings", status_code=201)
 async def create_booking(input: BookingCreate):
     if input.package not in PACKAGES:
