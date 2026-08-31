@@ -17,6 +17,7 @@ import Footer from "./components/Footer";
 import BookingModal from "./components/BookingModal";
 import StickyCTA from "./components/StickyCTA";
 import Admin from "./pages/Admin";
+import PaymentResult from "./pages/PaymentResult";
 import { Toaster } from "./components/ui/sonner";
 
 export const BookingContext = createContext({ openBooking: () => {} });
@@ -66,6 +67,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/payment/success" element={<PaymentResult mode="success" />} />
+          <Route path="/payment/cancel" element={<PaymentResult mode="cancel" />} />
         </Routes>
       </BrowserRouter>
     </LanguageProvider>

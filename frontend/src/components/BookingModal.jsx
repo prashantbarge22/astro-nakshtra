@@ -32,6 +32,7 @@ export default function BookingModal({ open, pkg, onClose }) {
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState(null);
   const [paymentsEnabled, setPaymentsEnabled] = useState(false);
+  const [provider, setProvider] = useState(null);
   const [form, setForm] = useState({
     full_name: "", dob: "", birth_time: "", birth_place: "",
     questions: "", preferred_day: "", preferred_time: "", email: "", phone: "",
@@ -41,7 +42,7 @@ export default function BookingModal({ open, pkg, onClose }) {
     if (!open) return;
     fetch(`${API}/config`)
       .then((r) => r.json())
-      .then((d) => setPaymentsEnabled(!!d.payments_enabled))
+      .then((d) => { setPaymentsEnabled(!!d.payments_enabled); setProvider(d.provider || null); })
       .catch(() => {});
   }, [open]);
 
@@ -71,6 +72,18 @@ export default function BookingModal({ open, pkg, onClose }) {
 
       if (!data.payments_enabled) {
         setResult(data.booking);
+        return;
+      }
+
+      if (data.provider === "stripe") {
+        const cres = await fetch(`${API}/payments/checkout`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ booking_id: data.booking.id, origin_url: window.location.origin }),
+        });
+        if (!cres.ok) throw new Error("checkout failed");
+        const cdata = await cres.json();
+        window.location.href = cdata.checkout_url;
         return;
       }
 
@@ -231,7 +244,9 @@ export default function BookingModal({ open, pkg, onClose }) {
                       </div>
                       <p className="mt-3 text-[11px] text-smoke/70 italic" data-testid="booking-pay-note">
                         {paymentsEnabled
-                          ? (lang === "hi" ? "Razorpay द्वारा सुरक्षित भुगतान — UPI, कार्ड, नेट बैंकिंग।" : "Secure payment via Razorpay — UPI, cards, net banking.")
+                          ? (provider === "stripe"
+                              ? (lang === "hi" ? "Stripe द्वारा सुरक्षित भुगतान — कार्ड और अन्य।" : "Secure payment via Stripe — cards & more.")
+                              : (lang === "hi" ? "Razorpay द्वारा सुरक्षित भुगतान — UPI, कार्ड, नेट बैंकिंग।" : "Secure payment via Razorpay — UPI, cards, net banking."))
                           : b.payNote}
                       </p>
                     </div>

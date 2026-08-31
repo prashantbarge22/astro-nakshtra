@@ -17,6 +17,7 @@ load_dotenv(ROOT_DIR / '.env')
 
 from payments import is_configured, create_order, verify_signature, get_key_id
 from emails import send_booking_emails
+from emergentintegrations.payments.stripe.checkout import StripeCheckout, CheckoutSessionRequest
 
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
@@ -53,9 +54,18 @@ async def root():
     return {"message": "Astro Nakshatra API"}
 
 
+def payment_provider():
+    if os.environ.get("STRIPE_API_KEY"):
+        return "stripe"
+    if is_configured():
+        return "razorpay"
+    return None
+
+
 @api_router.get("/config")
 async def config():
-    return {"payments_enabled": is_configured()}
+    provider = payment_provider()
+    return {"payments_enabled": provider is not None, "provider": provider}
 
 
 @api_router.get("/stats")
@@ -68,7 +78,8 @@ async def stats():
 async def create_booking(input: BookingCreate):
     if input.package not in PACKAGES:
         raise HTTPException(status_code=400, detail="Unknown package")
-    payments_on = is_configured()
+    provider = payment_provider()
+    payments_on = provider is not None
     doc = input.model_dump()
     doc.update({
         "id": str(uuid.uuid4()),
@@ -80,7 +91,7 @@ async def create_booking(input: BookingCreate):
     await db.bookings.insert_one(doc)
     doc.pop("_id", None)
 
-    if payments_on:
+    if provider == "razorpay":
         try:
             order = await asyncio.to_thread(create_order, PACKAGES[input.package], doc["id"])
         except Exception as e:
@@ -90,10 +101,99 @@ async def create_booking(input: BookingCreate):
         return {
             "booking": doc,
             "payments_enabled": True,
+            "provider": provider,
             "key_id": get_key_id(),
             "order": {"id": order["id"], "amount": order["amount"], "currency": order["currency"]},
         }
-    return {"booking": doc, "payments_enabled": False}
+    return {"booking": doc, "payments_enabled": payments_on, "provider": provider}
+
+
+class StripeCheckoutReq(BaseModel):
+    booking_id: str
+    origin_url: str
+
+
+async def _mark_paid(session_id: str):
+    res = await db.payment_transactions.update_one(
+        {"session_id": session_id, "payment_status": {"$ne": "paid"}},
+        {"$set": {"status": "completed", "payment_status": "paid",
+                  "updated_at": datetime.now(timezone.utc).isoformat()}},
+    )
+    tx = await db.payment_transactions.find_one({"session_id": session_id}, {"_id": 0})
+    if tx and res.modified_count and tx.get("booking_id"):
+        bres = await db.bookings.update_one(
+            {"id": tx["booking_id"], "payment_status": {"$ne": "paid"}},
+            {"$set": {"payment_status": "paid", "status": "pending_confirmation",
+                      "stripe_session_id": session_id}},
+        )
+        if bres.modified_count:
+            booking = await db.bookings.find_one({"id": tx["booking_id"]}, {"_id": 0})
+            if booking:
+                asyncio.create_task(send_booking_emails(booking))
+    return tx
+
+
+@api_router.post("/payments/checkout")
+async def stripe_checkout_session(input: StripeCheckoutReq, request: Request):
+    booking = await db.bookings.find_one({"id": input.booking_id}, {"_id": 0})
+    if not booking:
+        raise HTTPException(status_code=404, detail="Booking not found")
+    if booking.get("payment_status") == "paid":
+        raise HTTPException(status_code=400, detail="Booking already paid")
+    amount = float(PACKAGES[booking["package"]])
+    webhook_url = f"{str(request.base_url)}api/webhook/stripe"
+    sc = StripeCheckout(api_key=os.environ["STRIPE_API_KEY"], webhook_url=webhook_url)
+    req = CheckoutSessionRequest(
+        amount=amount,
+        currency="inr",
+        success_url=f"{input.origin_url}/payment/success?session_id={{CHECKOUT_SESSION_ID}}",
+        cancel_url=f"{input.origin_url}/payment/cancel",
+        metadata={"booking_id": booking["id"], "package": booking["package"]},
+    )
+    session = await sc.create_checkout_session(req)
+    await db.payment_transactions.insert_one({
+        "session_id": session.session_id,
+        "booking_id": booking["id"],
+        "amount": amount,
+        "currency": "inr",
+        "status": "initiated",
+        "payment_status": "pending",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+    })
+    return {"checkout_url": session.url, "session_id": session.session_id}
+
+
+@api_router.get("/payments/status/{session_id}")
+async def stripe_payment_status(session_id: str, request: Request):
+    record = await db.payment_transactions.find_one({"session_id": session_id}, {"_id": 0})
+    if not record:
+        raise HTTPException(status_code=404, detail="Transaction not found")
+    if record.get("payment_status") != "paid":
+        try:
+            webhook_url = f"{str(request.base_url)}api/webhook/stripe"
+            sc = StripeCheckout(api_key=os.environ["STRIPE_API_KEY"], webhook_url=webhook_url)
+            s = await sc.get_checkout_status(session_id)
+            if s.payment_status == "paid":
+                record = await _mark_paid(session_id)
+        except Exception as e:
+            logging.getLogger(__name__).warning(f"Stripe status check failed: {e}")
+    return {"session_id": record["session_id"], "status": record["status"],
+            "payment_status": record["payment_status"]}
+
+
+@api_router.post("/webhook/stripe")
+async def stripe_webhook(request: Request):
+    body = await request.body()
+    webhook_url = f"{str(request.base_url)}api/webhook/stripe"
+    sc = StripeCheckout(api_key=os.environ["STRIPE_API_KEY"], webhook_url=webhook_url)
+    try:
+        resp = await sc.handle_webhook(body, request.headers.get("Stripe-Signature"))
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid webhook")
+    if resp.payment_status == "paid":
+        await _mark_paid(resp.session_id)
+    return {"status": "ok"}
 
 
 @api_router.post("/bookings/verify")
