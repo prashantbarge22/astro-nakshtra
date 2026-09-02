@@ -32,6 +32,45 @@ const RunningNumber = ({ base = 5000, everyMs = 20000 }) => {
   return <span ref={ref}>{n.toLocaleString("en-IN")}+</span>;
 };
 
+const HEADLINES = {
+  en: [
+    "Feeling stuck?", "Feeling lost?", "Confused about what's next?", "Going nowhere?",
+    "Looking for direction?", "Career feeling uncertain?", "Relationship feeling complicated?",
+    "Business or studies not going as planned?", "Find your clarity.",
+  ],
+  hi: [
+    "अटके हुए हैं?", "भटके हुए हैं?", "आगे क्या, ये समझ नहीं आ रहा?", "कहीं पहुंच नहीं रहे?",
+    "दिशा तलाश रहे हैं?", "करियर अनिश्चित लग रहा है?", "रिश्ता उलझा हुआ लग रहा है?",
+    "बिज़नेस या पढ़ाई प्लान के मुताबिक नहीं चल रही?", "अपनी स्पष्टता पाइए।",
+  ],
+};
+
+const RotatingHeadline = () => {
+  const { lang } = useLang();
+  const list = HEADLINES[lang] || HEADLINES.en;
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setI((x) => (x + 1) % list.length), 2400);
+    return () => clearInterval(t);
+  }, [list.length]);
+  return (
+    <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl leading-[1.15] tracking-tight text-charcoal min-h-[2.4em] sm:min-h-[1.2em]" data-testid="hero-heading">
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={`${lang}-${i}`}
+          initial={{ opacity: 0, y: 22, filter: "blur(6px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          exit={{ opacity: 0, y: -22, filter: "blur(6px)" }}
+          transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+          className="block"
+        >
+          {list[i]}
+        </motion.span>
+      </AnimatePresence>
+    </h1>
+  );
+};
+
 const ShootingStars = () => (
   <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true" data-testid="shooting-stars">
     {[
@@ -158,9 +197,7 @@ export default function Hero() {
           {t.hero.eyebrow}
         </motion.p>
 
-        <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl leading-[1.12] tracking-tight text-charcoal" data-testid="hero-heading">
-          <MaskedLine delay={0.25}>{t.final.h1}</MaskedLine>
-        </h1>
+        <RotatingHeadline />
 
         <motion.p
           initial={{ opacity: 0, y: 14 }}

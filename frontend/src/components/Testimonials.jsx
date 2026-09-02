@@ -1,8 +1,12 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star } from "lucide-react";
+import { Star, ArrowRight } from "lucide-react";
+import { toast } from "sonner";
 import { Reveal, Eyebrow, CountUp } from "./Reveal";
 import { useLang } from "../i18n";
+import { BookingContext } from "../App";
+
+const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const Stars = ({ size = 14 }) => (
   <span className="flex text-champagne gap-0.5">
@@ -130,7 +134,87 @@ export default function Testimonials() {
             “{t.v4.trustClosing}”
           </p>
         </Reveal>
+
+        <Reveal className="mt-10">
+          <div className="grid md:grid-cols-2 gap-5 max-w-4xl mx-auto">
+            <FeedbackCard />
+            <BookAgainCard />
+          </div>
+        </Reveal>
       </div>
     </section>
   );
 }
+
+const FeedbackCard = () => {
+  const { t } = useLang();
+  const [name, setName] = useState("");
+  const [message, setMessage] = useState("");
+  const [sending, setSending] = useState(false);
+
+  const submit = async (e) => {
+    e.preventDefault();
+    if (!name.trim() || !message.trim()) return;
+    setSending(true);
+    try {
+      const res = await fetch(`${API}/feedback`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, message }),
+      });
+      if (!res.ok) throw new Error();
+      toast.success(t.v4.feedbackThanks);
+      setName("");
+      setMessage("");
+    } catch {
+      toast.error("Something went wrong");
+    } finally {
+      setSending(false);
+    }
+  };
+
+  return (
+    <form onSubmit={submit} className="bg-ivory border border-gold/25 rounded-2xl p-6 sm:p-7 shadow-[0_8px_32px_rgba(0,0,0,0.04)]" data-testid="feedback-form">
+      <p className="font-serif text-xl text-charcoal text-left">{t.v4.feedbackTitle}</p>
+      <input
+        data-testid="feedback-name-input"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder={t.v4.feedbackName}
+        className="mt-4 w-full rounded-xl border border-charcoal/15 bg-ivory px-4 py-3 text-sm text-charcoal placeholder:text-smoke/50"
+      />
+      <textarea
+        data-testid="feedback-message-input"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        placeholder={t.v4.feedbackMsg}
+        rows={3}
+        className="mt-3 w-full rounded-xl border border-charcoal/15 bg-ivory px-4 py-3 text-sm text-charcoal placeholder:text-smoke/50"
+      />
+      <button
+        data-testid="feedback-submit-button"
+        disabled={sending}
+        className="mt-4 rounded-full bg-charcoal text-ivory text-sm font-semibold px-6 py-3 hover:bg-gold hover:text-charcoal transition-colors disabled:opacity-60"
+      >
+        {t.v4.feedbackBtn}
+      </button>
+    </form>
+  );
+};
+
+const BookAgainCard = () => {
+  const { t } = useLang();
+  const { openBooking } = useContext(BookingContext);
+  return (
+    <div className="bg-charcoal text-ivory rounded-2xl p-6 sm:p-7 flex flex-col items-start justify-center" data-testid="book-today-card">
+      <p className="font-serif italic text-xl sm:text-2xl leading-snug">{t.final.line}</p>
+      <button
+        data-testid="book-today-button"
+        onClick={() => openBooking("consultation")}
+        className="mt-5 rounded-full bg-champagne text-charcoal text-sm font-bold px-6 py-3 hover:bg-gold transition-colors active:scale-[0.98] flex items-center gap-2"
+      >
+        {t.v4.bookToday} <ArrowRight size={15} />
+      </button>
+    </div>
+  );
+};

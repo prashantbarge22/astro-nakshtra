@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Globe from "react-globe.gl";
 import { Reveal } from "./Reveal";
 import { useLang } from "../i18n";
 
 const GWALIOR = { name: "Gwalior", lat: 26.2183, lng: 78.1828 };
-const ORIGINS = [
+const CITY_POOL = [
   { name: "New York", lat: 40.71, lng: -74.0 },
   { name: "London", lat: 51.5, lng: -0.12 },
   { name: "Dubai", lat: 25.2, lng: 55.27 },
@@ -14,16 +14,11 @@ const ORIGINS = [
   { name: "Toronto", lat: 43.65, lng: -79.38 },
   { name: "Doha", lat: 25.28, lng: 51.53 },
   { name: "Auckland", lat: -36.85, lng: 174.76 },
+  { name: "Berlin", lat: 52.52, lng: 13.4 },
+  { name: "Tokyo", lat: 35.68, lng: 139.69 },
+  { name: "Cape Town", lat: -33.92, lng: 18.42 },
+  { name: "São Paulo", lat: -23.55, lng: -46.63 },
 ];
-
-const ARCS = ORIGINS.map((o, i) => ({
-  startLat: o.lat, startLng: o.lng, endLat: GWALIOR.lat, endLng: GWALIOR.lng,
-  dash: 0.25 + (i % 3) * 0.18,
-  gap: 0.12 + (i % 4) * 0.09,
-  time: 1300 + i * 340,
-  alt: 0.22 + (i % 3) * 0.14,
-}));
-const POINTS = [...ORIGINS, GWALIOR];
 
 const TICKER = [
   ["Ritu", "Jaipur"], ["Farhan", "Dubai"], ["Meera", "London"], ["Dev", "Pune"],
@@ -39,6 +34,7 @@ export default function LiveMap() {
   const [totalVisitors, setTotalVisitors] = useState(12483);
   const [ordersToday, setOrdersToday] = useState(1264);
   const [tick, setTick] = useState(0);
+  const [arcRound, setArcRound] = useState(0);
 
   useEffect(() => {
     const el = wrapRef.current;
@@ -57,8 +53,24 @@ export default function LiveMap() {
     const t3 = setInterval(() => setTick((i) => i + 1), 4200);
     const t4 = setInterval(() => setTotalVisitors((v) => v + 7), 6000);
     const t5 = setInterval(() => setOrdersToday((v) => v + 1), 18000);
-    return () => { clearInterval(t1); clearInterval(t2); clearInterval(t3); clearInterval(t4); clearInterval(t5); };
+    const t6 = setInterval(() => setArcRound((r) => r + 1), 9000);
+    return () => [t1, t2, t3, t4, t5, t6].forEach(clearInterval);
   }, []);
+
+  const { arcs, points } = useMemo(() => {
+    const rotated = [...CITY_POOL.slice(arcRound % CITY_POOL.length), ...CITY_POOL.slice(0, arcRound % CITY_POOL.length)];
+    const active = rotated.slice(0, 8);
+    return {
+      arcs: active.map((o, i) => ({
+        startLat: o.lat, startLng: o.lng, endLat: GWALIOR.lat, endLng: GWALIOR.lng,
+        dash: 0.25 + (i % 3) * 0.18,
+        gap: 0.12 + (i % 4) * 0.09,
+        time: 1300 + i * 340,
+        alt: 0.22 + (i % 3) * 0.14,
+      })),
+      points: [...active, GWALIOR],
+    };
+  }, [arcRound]);
 
   const order = TICKER[tick % TICKER.length];
 
@@ -73,8 +85,8 @@ export default function LiveMap() {
     <section className="py-20 sm:py-24 bg-charcoal text-ivory" data-testid="live-map-section">
       <div className="max-w-6xl mx-auto px-6 sm:px-10">
         <Reveal className="text-center">
-          <h2 className="font-serif text-3xl sm:text-4xl tracking-tight">{t.v4.mapTitle}</h2>
-          <p className="mt-3 text-ivory/60 text-sm sm:text-base">{t.v4.mapSub}</p>
+          <h2 className="font-serif text-3xl sm:text-4xl tracking-tight max-w-3xl mx-auto leading-snug">{t.v4.mapTitle}</h2>
+          <p className="mt-3 text-ivory/60 text-sm sm:text-base max-w-2xl mx-auto">{t.v4.mapSub}</p>
           <p className="mt-2 font-serif italic text-champagne text-base sm:text-lg" data-testid="map-trust-tagline">{t.v4.mapTrust}</p>
         </Reveal>
 
@@ -97,14 +109,14 @@ export default function LiveMap() {
               height={size.h}
               backgroundColor="rgba(0,0,0,0)"
               globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
-              arcsData={ARCS}
+              arcsData={arcs}
               arcColor={() => ["#FFD700", "#C59B27"]}
               arcDashLength={(d) => d.dash}
               arcDashGap={(d) => d.gap}
               arcDashAnimateTime={(d) => d.time}
               arcAltitude={(d) => d.alt}
               arcStroke={1.1}
-              pointsData={POINTS}
+              pointsData={points}
               pointColor={(d) => (d.name === "Gwalior" ? "#FFD700" : "#C59B27")}
               pointAltitude={(d) => (d.name === "Gwalior" ? 0.05 : 0.015)}
               pointRadius={(d) => (d.name === "Gwalior" ? 0.9 : 0.5)}
@@ -114,7 +126,7 @@ export default function LiveMap() {
               labelColor={() => "#D4AF37"}
               labelDotRadius={0.4}
               autoRotate
-              autoRotateSpeed={0.5}
+              autoRotateSpeed={0.35}
               enableZoom={false}
             />
             <p className="absolute top-4 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.25em] text-ivory/40 font-semibold pointer-events-none" data-testid="globe-drag-hint">

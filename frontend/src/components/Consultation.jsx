@@ -55,17 +55,18 @@ export default function Consultation() {
   const [reports, setReports] = useState(2000);
   const [people, setPeople] = useState(52);
   const [orderIdx, setOrderIdx] = useState(0);
+  const [objIdx, setObjIdx] = useState(0);
 
   useEffect(() => {
     const t1 = setInterval(() => setReports((r) => r + 1), 18000);
     const t2 = setInterval(() => setPeople((p) => Math.max(47, Math.min(63, p + (Math.random() > 0.5 ? 1 : -1)))), 4000);
     const t3 = setInterval(() => setOrderIdx((i) => i + 1), 4000);
-    return () => { clearInterval(t1); clearInterval(t2); clearInterval(t3); };
-  }, []);
+    const t4 = setInterval(() => setObjIdx((i) => (i + 1) % t.v4.objectionLines.length), 3600);
+    return () => { clearInterval(t1); clearInterval(t2); clearInterval(t3); clearInterval(t4); };
+  }, [t]);
 
   const order = ORDER_FEED[orderIdx % ORDER_FEED.length];
   const orderAction = orderIdx % 3 === 2 ? t.v4.orderBlueprint : t.v4.orderBooked;
-  const bundleItems = [...t.consult.gets.slice(0, 3), ...t.blueprint.items.slice(0, 3), t.blueprint.items[8], t.blueprint.items[9]].filter(Boolean);
 
   return (
     <section id="plans" className="relative py-20 sm:py-24 overflow-hidden" data-testid="plans-section">
@@ -79,29 +80,40 @@ export default function Consultation() {
 
         <div className="mt-12 grid md:grid-cols-3 gap-6">
           <PlanCard
-            testid="plan-card-99" ctaTestid="plan-99-cta"
+            testid="plan-card-99" ctaTestid="plan-99-cta" badge={t.v4.basicBadge}
             price="₹99" title={t.v4.plan99Title} tag={t.consult.title}
-            items={t.consult.gets.slice(0, 10)} cta={t.v4.plan99Cta}
+            items={t.v4.plan99Items} cta={t.v4.plan99Cta}
             onClick={() => openBooking("consultation")}
           />
           <PlanCard
             testid="plan-card-149" ctaTestid="plan-149-cta" delay={0.08}
             price="₹349" title={t.v4.plan149Title} tag={t.v3.bpLine} badge={t.v4.cheapestBadge}
-            items={t.blueprint.items} cta={t.v4.plan149Cta}
+            items={t.v4.plan149Items} cta={t.v4.plan149Cta}
             onClick={() => openBooking("blueprint")}
           />
           <PlanCard
             testid="plan-card-299" ctaTestid="plan-299-cta" delay={0.16}
             price="₹299" title={t.v4.plan299Title} tag={t.v4.plan299Tag} badge={t.v4.bestValue}
-            items={bundleItems} cta={t.v4.plan299Cta}
+            items={t.v4.plan299Items} cta={t.v4.plan299Cta}
             onClick={() => openBooking("bundle")}
           />
         </div>
 
         <Reveal className="mt-12">
-          <div className="border-l-2 border-gold pl-6 py-2 max-w-2xl" data-testid="objection-block">
-            <p className="font-serif italic text-xl sm:text-2xl text-charcoal">{t.consult.objectionQ}</p>
-            <p className="mt-3 text-smoke text-sm sm:text-base leading-relaxed">{t.consult.objectionA1}</p>
+          <div className="border-l-2 border-gold pl-6 py-2 max-w-2xl min-h-[96px]" data-testid="objection-block">
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={objIdx}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                className="font-serif italic text-xl sm:text-2xl text-charcoal leading-snug"
+                data-testid="objection-rotator"
+              >
+                {t.v4.objectionLines[objIdx]}
+              </motion.p>
+            </AnimatePresence>
           </div>
         </Reveal>
 

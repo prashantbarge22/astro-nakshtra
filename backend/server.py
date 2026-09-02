@@ -74,6 +74,24 @@ async def stats():
     return {"slots_booked": count}
 
 
+class FeedbackCreate(BaseModel):
+    name: str
+    message: str
+
+
+@api_router.post("/feedback", status_code=201)
+async def create_feedback(input: FeedbackCreate):
+    doc = {
+        "id": str(uuid.uuid4()),
+        "name": input.name,
+        "message": input.message,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.feedback.insert_one(doc)
+    doc.pop("_id", None)
+    return doc
+
+
 @api_router.post("/bookings", status_code=201)
 async def create_booking(input: BookingCreate):
     if input.package not in PACKAGES:
