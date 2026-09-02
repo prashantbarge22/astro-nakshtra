@@ -6,7 +6,7 @@ import { BookingContext } from "../App";
 import StarCanvas from "./StarCanvas";
 import { CountUp } from "./Reveal";
 
-const GOLD_STARS_BG = "https://images.unsplash.com/photo-1462331940025-496dfbfc7569?crop=entropy&cs=srgb&fm=jpg&w=1600&q=80";
+const GOLD_STARS_BG = "https://images.unsplash.com/photo-1429305336325-b84ace7eba3b?crop=entropy&cs=srgb&fm=jpg&w=1600&q=80";
 
 const PEOPLE = [
   ["Aarav", "Maharashtra"], ["Priya", "Karnataka"], ["Rohit", "Delhi"],

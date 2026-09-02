@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { Reveal, Eyebrow, CountUp } from "./Reveal";
 import { useLang } from "../i18n";
 
@@ -21,6 +22,14 @@ export default function Astrologer() {
                 <span key={i} className="shooting-star" style={style} />
               ))}
             </div>
+            <motion.svg viewBox="0 0 200 160" className="absolute left-6 top-6 w-32 sm:w-44 opacity-80 pointer-events-none" aria-hidden="true" data-testid="astrologer-constellation">
+              <motion.path d="M20 130 L60 70 L110 100 L160 40" stroke="#D4AF37" strokeWidth="1" fill="none"
+                initial={{ pathLength: 0 }} whileInView={{ pathLength: 1 }} viewport={{ once: true }} transition={{ duration: 2.8, ease: "easeInOut" }} />
+              {[[20, 130], [60, 70], [110, 100], [160, 40]].map(([cx, cy], i) => (
+                <motion.circle key={i} cx={cx} cy={cy} r="3" fill="#FFD700"
+                  initial={{ scale: 0 }} whileInView={{ scale: 1 }} viewport={{ once: true }} transition={{ delay: 0.4 + i * 0.5 }} />
+              ))}
+            </motion.svg>
             <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/20 to-transparent" />
             <p className="absolute bottom-6 sm:bottom-10 left-6 sm:left-10 right-6 font-serif italic text-2xl sm:text-3xl lg:text-4xl text-ivory leading-snug max-w-2xl" data-testid="astrologer-trust-line">
               {t.astrologer.trust}

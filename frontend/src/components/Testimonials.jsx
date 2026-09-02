@@ -70,7 +70,7 @@ export default function Testimonials() {
         <Reveal className="mt-10">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4" data-testid="testimonials-dashboard">
             <motion.div whileHover={{ y: -4 }} className="bg-ivory border border-charcoal/8 rounded-2xl px-6 py-6 text-center shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
-              <p className="font-serif text-3xl sm:text-4xl text-charcoal"><CountUp value="4.9" /></p>
+              <p className="font-serif text-3xl sm:text-4xl text-charcoal"><CountUp value="4.8" /></p>
               <div className="mt-1.5 flex justify-center"><Stars size={11} /></div>
               <p className="mt-1.5 text-[10px] uppercase tracking-[0.2em] text-smoke font-semibold">Rating</p>
             </motion.div>

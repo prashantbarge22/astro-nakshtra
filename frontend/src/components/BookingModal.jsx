@@ -27,7 +27,7 @@ const Field = ({ label, children, id }) => (
 export default function BookingModal({ open, pkg, onClose }) {
   const { t, lang } = useLang();
   const b = t.booking;
-  const AMOUNTS = { consultation: 99, blueprint: 349, bundle: 299 };
+  const AMOUNTS = { consultation: 99, blueprint: 399, bundle: 299 };
   const amount = AMOUNTS[pkg] || 99;
   const pkgTitle = pkg === "blueprint" ? b.titleBlueprint : pkg === "bundle" ? (lang === "hi" ? "कंप्लीट बंडल — ₹299" : "Complete Bundle — ₹299") : b.titleConsult;
   const [step, setStep] = useState(1);

@@ -4,7 +4,7 @@ import Globe from "react-globe.gl";
 import { Reveal } from "./Reveal";
 import { useLang } from "../i18n";
 
-const GWALIOR = { name: "Gwalior", lat: 26.2183, lng: 78.1828 };
+const HQ = { name: "Astro Nakshatra HQ", lat: 26.2183, lng: 78.1828 };
 const CITY_POOL = [
   { name: "New York", lat: 40.71, lng: -74.0 },
   { name: "London", lat: 51.5, lng: -0.12 },
@@ -16,8 +16,12 @@ const CITY_POOL = [
   { name: "Auckland", lat: -36.85, lng: 174.76 },
   { name: "Berlin", lat: 52.52, lng: 13.4 },
   { name: "Tokyo", lat: 35.68, lng: 139.69 },
-  { name: "Cape Town", lat: -33.92, lng: 18.42 },
-  { name: "São Paulo", lat: -23.55, lng: -46.63 },
+  { name: "Mumbai", lat: 19.07, lng: 72.87 },
+  { name: "Delhi", lat: 28.61, lng: 77.2 },
+  { name: "Bengaluru", lat: 12.97, lng: 77.59 },
+  { name: "Kolkata", lat: 22.57, lng: 88.36 },
+  { name: "Chennai", lat: 13.08, lng: 80.27 },
+  { name: "Jaipur", lat: 26.9, lng: 75.8 },
 ];
 
 const TICKER = [
@@ -59,16 +63,16 @@ export default function LiveMap() {
 
   const { arcs, points } = useMemo(() => {
     const rotated = [...CITY_POOL.slice(arcRound % CITY_POOL.length), ...CITY_POOL.slice(0, arcRound % CITY_POOL.length)];
-    const active = rotated.slice(0, 8);
+    const active = rotated.slice(0, 10);
     return {
       arcs: active.map((o, i) => ({
-        startLat: o.lat, startLng: o.lng, endLat: GWALIOR.lat, endLng: GWALIOR.lng,
+        startLat: o.lat, startLng: o.lng, endLat: HQ.lat, endLng: HQ.lng,
         dash: 0.25 + (i % 3) * 0.18,
         gap: 0.12 + (i % 4) * 0.09,
         time: 1300 + i * 340,
         alt: 0.22 + (i % 3) * 0.14,
       })),
-      points: [...active, GWALIOR],
+      points: [...active, HQ],
     };
   }, [arcRound]);
 
@@ -117,10 +121,10 @@ export default function LiveMap() {
               arcAltitude={(d) => d.alt}
               arcStroke={1.1}
               pointsData={points}
-              pointColor={(d) => (d.name === "Gwalior" ? "#FFD700" : "#C59B27")}
-              pointAltitude={(d) => (d.name === "Gwalior" ? 0.05 : 0.015)}
-              pointRadius={(d) => (d.name === "Gwalior" ? 0.9 : 0.5)}
-              labelsData={[GWALIOR]}
+              pointColor={(d) => (d.name === "Astro Nakshatra HQ" ? "#FFD700" : "#C59B27")}
+              pointAltitude={(d) => (d.name === "Astro Nakshatra HQ" ? 0.05 : 0.015)}
+              pointRadius={(d) => (d.name === "Astro Nakshatra HQ" ? 0.9 : 0.5)}
+              labelsData={[HQ]}
               labelText="name"
               labelSize={2.4}
               labelColor={() => "#D4AF37"}

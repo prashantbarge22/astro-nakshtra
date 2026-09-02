@@ -10,6 +10,30 @@ const ORDER_FEED = [
   ["Arjun", "Chandigarh"], ["Kavya", "Chennai"], ["Vikram", "Jaipur"], ["Ananya", "Kolkata"],
 ];
 
+const TitleRotator = ({ words }) => {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setI((x) => (x + 1) % words.length), 2200);
+    return () => clearInterval(t);
+  }, [words.length]);
+  return (
+    <span className="inline-block text-gold italic" data-testid="plans-title-rotator">
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={i}
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -14 }}
+          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+          className="inline-block"
+        >
+          {words[i]}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  );
+};
+
 const PlanCard = ({ testid, ctaTestid, price, title, tag, items, cta, onClick, badge, delay = 0 }) => (
   <Reveal delay={delay} className="h-full">
     <div className="beam-border rounded-3xl h-full" data-testid={testid}>
@@ -19,7 +43,9 @@ const PlanCard = ({ testid, ctaTestid, price, title, tag, items, cta, onClick, b
             {badge}
           </span>
         )}
-        <p className="font-deco text-4xl sm:text-5xl text-charcoal">{price}</p>
+        <p className="font-deco text-4xl sm:text-5xl text-charcoal">
+          {price} <span className="font-serif italic text-lg sm:text-xl text-gold">only</span>
+        </p>
         <h3 className="mt-3 font-serif text-xl sm:text-2xl text-charcoal leading-snug">{title}</h3>
         <p className="mt-2 font-serif italic text-gold text-sm sm:text-base">{tag}</p>
         <ul className="mt-6 space-y-2.5 flex-1">
@@ -75,7 +101,9 @@ export default function Consultation() {
       <div className="relative max-w-7xl mx-auto px-6 sm:px-10">
         <Reveal>
           <Eyebrow>{t.v4.plansEyebrow}</Eyebrow>
-          <h2 className="font-serif text-3xl sm:text-4xl tracking-tight text-charcoal">{t.v4.plansTitle}</h2>
+          <h2 className="font-serif text-3xl sm:text-4xl tracking-tight text-charcoal">
+            {t.v4.plansTitle} <TitleRotator words={t.v4.planWords} />
+          </h2>
         </Reveal>
 
         <div className="mt-12 grid md:grid-cols-3 gap-6">
@@ -87,7 +115,7 @@ export default function Consultation() {
           />
           <PlanCard
             testid="plan-card-149" ctaTestid="plan-149-cta" delay={0.08}
-            price="₹349" title={t.v4.plan149Title} tag={t.v3.bpLine} badge={t.v4.cheapestBadge}
+            price="₹399" title={t.v4.plan149Title} tag={t.v3.bpLine} badge={t.v4.cheapestBadge}
             items={t.v4.plan149Items} cta={t.v4.plan149Cta}
             onClick={() => openBooking("blueprint")}
           />
