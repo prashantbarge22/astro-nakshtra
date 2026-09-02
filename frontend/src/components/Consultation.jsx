@@ -10,10 +10,15 @@ const ORDER_FEED = [
   ["Arjun", "Chandigarh"], ["Kavya", "Chennai"], ["Vikram", "Jaipur"], ["Ananya", "Kolkata"],
 ];
 
-const PlanCard = ({ testid, ctaTestid, price, title, tag, items, cta, onClick, delay = 0 }) => (
+const PlanCard = ({ testid, ctaTestid, price, title, tag, items, cta, onClick, badge, delay = 0 }) => (
   <Reveal delay={delay} className="h-full">
     <div className="beam-border rounded-3xl h-full" data-testid={testid}>
       <div className="beam-inner bg-ivory rounded-[calc(1.5rem-1.5px)] p-8 sm:p-10 h-full flex flex-col">
+        {badge && (
+          <span className="w-fit rounded-full bg-gold/15 border border-gold/40 text-gold text-[10px] uppercase tracking-[0.2em] font-bold px-3.5 py-1.5 mb-4" data-testid={`${testid}-badge`}>
+            {badge}
+          </span>
+        )}
         <p className="font-deco text-5xl sm:text-6xl text-charcoal">{price}</p>
         <h3 className="mt-4 font-serif text-2xl text-charcoal leading-snug">{title}</h3>
         <p className="mt-2 font-serif italic text-gold">{tag}</p>
@@ -80,7 +85,7 @@ export default function Consultation() {
           />
           <PlanCard
             testid="plan-card-149" ctaTestid="plan-149-cta" delay={0.1}
-            price="₹149" title={t.v4.plan149Title} tag={t.v3.bpLine}
+            price="₹349" title={t.v4.plan149Title} tag={t.v3.bpLine} badge={t.v4.cheapestBadge}
             items={t.blueprint.items} cta={t.v4.plan149Cta}
             onClick={() => openBooking("blueprint")}
           />

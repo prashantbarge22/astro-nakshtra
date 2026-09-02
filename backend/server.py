@@ -26,7 +26,7 @@ db = client[os.environ['DB_NAME']]
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
 
-PACKAGES = {"consultation": 99, "blueprint": 149}
+PACKAGES = {"consultation": 99, "blueprint": 349}
 
 
 class BookingCreate(BaseModel):

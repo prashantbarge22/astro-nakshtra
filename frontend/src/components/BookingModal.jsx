@@ -27,7 +27,7 @@ const Field = ({ label, children, id }) => (
 export default function BookingModal({ open, pkg, onClose }) {
   const { t, lang } = useLang();
   const b = t.booking;
-  const amount = pkg === "blueprint" ? 149 : 99;
+  const amount = pkg === "blueprint" ? 349 : 99;
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState(null);
