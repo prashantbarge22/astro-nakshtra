@@ -2,30 +2,36 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Reveal } from "./Reveal";
 import { useLang } from "../i18n";
-import StarCanvas from "./StarCanvas";
 
-const CITIES = [
-  { name: "Delhi", x: 30, y: 16 }, { name: "Jaipur", x: 24, y: 28 },
-  { name: "Lucknow", x: 40, y: 22 }, { name: "Ahmedabad", x: 18, y: 44 },
-  { name: "Mumbai", x: 16, y: 60 }, { name: "Kolkata", x: 66, y: 38 },
-  { name: "Hyderabad", x: 34, y: 58 }, { name: "Pune", x: 20, y: 64 },
-  { name: "Bengaluru", x: 30, y: 80 }, { name: "Chennai", x: 38, y: 76 },
+const WORLD_MAP = "https://images.unsplash.com/photo-1524661135-423995f22d0b?crop=entropy&cs=srgb&fm=jpg&w=1600&q=80";
+
+const GWALIOR = { x: 672, y: 178 };
+const ORIGINS = [
+  { name: "New York", x: 262, y: 150 },
+  { name: "London", x: 468, y: 100 },
+  { name: "Dubai", x: 598, y: 185 },
+  { name: "Singapore", x: 762, y: 252 },
+  { name: "Sydney", x: 885, y: 332 },
 ];
 
+const arc = (o) => {
+  const cx = (o.x + GWALIOR.x) / 2;
+  const cy = Math.min(o.y, GWALIOR.y) - 90;
+  return `M ${o.x} ${o.y} Q ${cx} ${cy} ${GWALIOR.x} ${GWALIOR.y}`;
+};
+
 const TICKER = [
-  ["Ritu", "Jaipur"], ["Farhan", "Delhi"], ["Meera", "Kochi"], ["Dev", "Pune"],
-  ["Sana", "Mumbai"], ["Arnav", "Bengaluru"], ["Zoya", "Hyderabad"], ["Kabir", "Lucknow"],
+  ["Ritu", "Jaipur"], ["Farhan", "Dubai"], ["Meera", "London"], ["Dev", "Pune"],
+  ["Sana", "New York"], ["Arnav", "Singapore"], ["Zoya", "Sydney"], ["Kabir", "Lucknow"],
 ];
 
 export default function LiveMap() {
   const { t } = useLang();
-  const [active, setActive] = useState(0);
   const [tick, setTick] = useState(0);
 
   useEffect(() => {
-    const t1 = setInterval(() => setActive((i) => (i + 1) % CITIES.length), 2200);
     const t2 = setInterval(() => setTick((i) => i + 1), 4200);
-    return () => { clearInterval(t1); clearInterval(t2); };
+    return () => clearInterval(t2);
   }, []);
 
   const order = TICKER[tick % TICKER.length];
@@ -38,38 +44,54 @@ export default function LiveMap() {
           <p className="mt-3 text-ivory/60 text-sm sm:text-base">{t.v4.mapSub}</p>
         </Reveal>
         <Reveal delay={0.1}>
-          <div className="relative mt-12 rounded-3xl border border-ivory/10 overflow-hidden aspect-[16/9] sm:aspect-[21/9]"
-            style={{ backgroundImage: "radial-gradient(rgba(212,175,55,0.14) 1px, transparent 1px)", backgroundSize: "26px 26px" }}
-            data-testid="live-map-panel"
-          >
-            <div className="absolute inset-0 opacity-40"><StarCanvas density={50} /></div>
-            {CITIES.map((c, i) => (
-              <div key={c.name} className="absolute" style={{ left: `${c.x}%`, top: `${c.y}%` }} data-testid={`map-city-${i}`}>
-                <span className={`block h-2 w-2 rounded-full ${i === active ? "bg-champagne" : "bg-gold/50"}`} />
-                {i === active && (
-                  <motion.span
-                    key={active}
-                    initial={{ scale: 0.4, opacity: 0.9 }}
-                    animate={{ scale: 3.4, opacity: 0 }}
-                    transition={{ duration: 1.6, ease: "easeOut" }}
-                    className="absolute inset-0 rounded-full bg-gold/60"
+          <div className="relative mt-12 rounded-3xl border border-ivory/10 overflow-hidden aspect-[4/3] sm:aspect-[21/9]" data-testid="live-map-panel">
+            <img
+              src={WORLD_MAP}
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 w-full h-full object-cover opacity-35"
+              style={{ filter: "grayscale(0.8) sepia(0.35) brightness(0.7)" }}
+              loading="lazy"
+            />
+            <svg viewBox="0 0 1000 480" preserveAspectRatio="none" className="absolute inset-0 w-full h-full">
+              {ORIGINS.map((o, i) => (
+                <g key={o.name}>
+                  <motion.path
+                    d={arc(o)}
+                    fill="none"
+                    stroke="#C59B27"
+                    strokeWidth="1.2"
+                    strokeDasharray="6 6"
+                    opacity="0.55"
+                    initial={{ pathLength: 0 }}
+                    whileInView={{ pathLength: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1.6, delay: 0.3 + i * 0.25, ease: "easeInOut" }}
                   />
-                )}
-                <AnimatePresence>
-                  {i === active && (
-                    <motion.span
-                      key={`label-${active}`}
-                      initial={{ opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0 }}
-                      className="absolute left-3 -top-1 text-[10px] uppercase tracking-[0.18em] text-champagne whitespace-nowrap"
-                    >
-                      {c.name}
-                    </motion.span>
-                  )}
-                </AnimatePresence>
-              </div>
-            ))}
+                  <circle r="4" fill="#D4AF37">
+                    <animateMotion dur={`${3 + i * 0.7}s`} repeatCount="indefinite" path={arc(o)} begin={`${i * 0.6}s`} />
+                  </circle>
+                  <circle cx={o.x} cy={o.y} r="3" fill="#C59B27" opacity="0.8" />
+                </g>
+              ))}
+              <motion.circle
+                cx={GWALIOR.x} cy={GWALIOR.y} fill="#D4AF37"
+                animate={{ r: [6, 10, 6], opacity: [1, 0.7, 1] }}
+                transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <motion.circle
+                cx={GWALIOR.x} cy={GWALIOR.y} fill="none" stroke="#D4AF37" strokeWidth="1.5"
+                animate={{ r: [10, 34], opacity: [0.7, 0] }}
+                transition={{ duration: 2.2, repeat: Infinity, ease: "easeOut" }}
+              />
+            </svg>
+            <span
+              className="absolute text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] text-champagne bg-charcoal/70 backdrop-blur px-3 py-1.5 rounded-full border border-gold/40"
+              style={{ left: `${(GWALIOR.x / 1000) * 100}%`, top: `${(GWALIOR.y / 480) * 100}%`, transform: "translate(14px, -50%)" }}
+              data-testid="gwalior-marker"
+            >
+              Gwalior
+            </span>
             <div className="absolute bottom-4 left-4 right-4 flex justify-center">
               <AnimatePresence mode="wait">
                 <motion.p
@@ -78,7 +100,7 @@ export default function LiveMap() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.4 }}
-                  className="text-xs sm:text-sm text-ivory/80 bg-charcoal/70 backdrop-blur px-4 py-2 rounded-full border border-gold/25"
+                  className="text-xs sm:text-sm text-ivory/85 bg-charcoal/70 backdrop-blur px-4 py-2 rounded-full border border-gold/25"
                   data-testid="map-order-ticker"
                 >
                   <span className="text-champagne">✦</span> <span className="font-semibold">{order[0]}</span> {t.v3.from} {order[1]} {tick % 3 === 2 ? t.v4.orderBlueprint : t.v4.orderBooked}

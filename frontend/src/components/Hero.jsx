@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform, animate, useInView } from "framer-motion";
 import { Star, X } from "lucide-react";
 import { useLang } from "../i18n";
 import { BookingContext } from "../App";
@@ -14,6 +14,23 @@ const PEOPLE = [
   ["Vikram", "Rajasthan"], ["Ananya", "West Bengal"], ["Kabir", "Uttar Pradesh"],
   ["Meera", "Kerala"], ["Ishan", "Madhya Pradesh"], ["Divya", "Telangana"],
 ];
+
+const RunningNumber = ({ base = 5000, everyMs = 20000 }) => {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true });
+  const [n, setN] = useState(0);
+  useEffect(() => {
+    if (!inView) return;
+    const controls = animate(0, base, {
+      duration: 1.8,
+      ease: [0.16, 1, 0.3, 1],
+      onUpdate: (v) => setN(Math.round(v)),
+    });
+    const t = setInterval(() => setN((x) => x + 1), everyMs);
+    return () => { controls.stop(); clearInterval(t); };
+  }, [inView, base, everyMs]);
+  return <span ref={ref}>{n.toLocaleString("en-IN")}+</span>;
+};
 
 const ShootingStars = () => (
   <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true" data-testid="shooting-stars">
@@ -213,7 +230,7 @@ export default function Hero() {
           </span>
           <span className="h-4 w-px bg-gold/40" />
           <span className="flex items-baseline gap-2">
-            <span className="font-serif text-xl text-charcoal" data-testid="hero-customers-count"><CountUp value="5,000+" /></span>
+            <span className="font-serif text-xl text-charcoal" data-testid="hero-customers-count"><RunningNumber /></span>
             <span className="text-[10px] uppercase tracking-[0.25em] text-smoke">customers</span>
           </span>
           <span className="h-4 w-px bg-gold/40" />

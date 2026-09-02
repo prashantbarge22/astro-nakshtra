@@ -32,18 +32,22 @@ const REVIEW_POOL = [
   { text: "Honest and to the point.", name: "Sana", place: "Australia" },
   { text: "The 20 minutes flew by.", name: "Arnav", place: "India" },
   { text: "Exactly what I needed to hear.", name: "Zoya", place: "USA" },
+  { text: "No bots, just a real person.", name: "Karan", place: "India" },
+  { text: "My blueprint was spot on.", name: "Lena", place: "Germany" },
+  { text: "Clear direction in one call.", name: "Omar", place: "Qatar" },
+  { text: "Best ₹99 I ever spent.", name: "Nidhi", place: "India" },
 ];
 
 export default function Testimonials() {
   const { t } = useLang();
   const [slots, setSlots] = useState(56920);
-  const [reviews, setReviews] = useState(REVIEW_POOL.slice(0, 4));
-  const [nextIdx, setNextIdx] = useState(4);
+  const [reviews, setReviews] = useState(REVIEW_POOL.slice(0, 6));
+  const [nextIdx, setNextIdx] = useState(6);
 
   useEffect(() => {
     const t1 = setInterval(() => setSlots((s) => s + 2), 15000);
     const t2 = setInterval(() => {
-      setReviews((r) => [REVIEW_POOL[nextIdx % REVIEW_POOL.length], ...r].slice(0, 4));
+      setReviews((r) => [REVIEW_POOL[nextIdx % REVIEW_POOL.length], ...r].slice(0, 6));
       setNextIdx((i) => i + 1);
     }, 6000);
     return () => { clearInterval(t1); clearInterval(t2); };
@@ -100,7 +104,7 @@ export default function Testimonials() {
           </span>
         </div>
 
-        <div className="mt-5 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="mt-5 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <AnimatePresence initial={false}>
             {reviews.map((r, i) => (
               <motion.div

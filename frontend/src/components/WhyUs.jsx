@@ -12,7 +12,7 @@ export default function WhyUs() {
         <Reveal>
           <div className="text-center max-w-2xl mx-auto">
             <p className="font-deco text-2xl sm:text-3xl tracking-wide text-gold mb-3">{t.why.eyebrow}</p>
-            <h2 className="font-serif text-lg sm:text-xl leading-snug text-charcoal">{t.why.title}</h2>
+            <h2 className="font-serif text-lg sm:text-xl leading-snug text-charcoal">{t.v4.whyQuestion}</h2>
           </div>
         </Reveal>
         <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">

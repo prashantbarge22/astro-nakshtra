@@ -34,8 +34,9 @@ const PlanCard = ({ testid, ctaTestid, price, title, tag, items, cta, onClick, d
         <button
           data-testid={ctaTestid}
           onClick={onClick}
-          className="mt-8 rounded-full bg-charcoal text-ivory font-semibold text-sm sm:text-base px-8 py-4 hover:bg-gold hover:text-charcoal transition-colors active:scale-[0.98] flex items-center justify-center gap-2"
+          className="relative overflow-hidden mt-8 rounded-full bg-gradient-to-b from-champagne to-gold text-charcoal font-bold text-sm sm:text-base px-8 py-4 hover:shadow-[0_12px_36px_rgba(197,155,39,0.45)] transition-shadow active:scale-[0.98] flex items-center justify-center gap-2"
         >
+          <span className="gold-shine" aria-hidden="true" />
           {cta} <ArrowRight size={16} />
         </button>
       </div>
@@ -61,8 +62,10 @@ export default function Consultation() {
   const orderAction = orderIdx % 3 === 2 ? t.v4.orderBlueprint : t.v4.orderBooked;
 
   return (
-    <section id="plans" className="py-20 sm:py-24" data-testid="plans-section">
-      <div className="max-w-6xl mx-auto px-6 sm:px-10">
+    <section id="plans" className="relative py-20 sm:py-24 overflow-hidden" data-testid="plans-section">
+      <div className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full bg-[radial-gradient(circle,rgba(212,175,55,0.22),transparent_65%)] blur-3xl animate-pulse-soft pointer-events-none" aria-hidden="true" />
+      <div className="absolute top-1/3 -right-32 w-[420px] h-[420px] rounded-full bg-[radial-gradient(circle,rgba(197,155,39,0.16),transparent_65%)] blur-3xl pointer-events-none" aria-hidden="true" />
+      <div className="relative max-w-6xl mx-auto px-6 sm:px-10">
         <Reveal>
           <Eyebrow>{t.v4.plansEyebrow}</Eyebrow>
           <h2 className="font-serif text-3xl sm:text-4xl tracking-tight text-charcoal">{t.v4.plansTitle}</h2>
