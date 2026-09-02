@@ -10,7 +10,7 @@ import Manifesto from "./components/Manifesto";
 import WhyUs from "./components/WhyUs";
 import AskTopics from "./components/AskTopics";
 import Consultation from "./components/Consultation";
-import Blueprint from "./components/Blueprint";
+import LiveMap from "./components/LiveMap";
 import Testimonials from "./components/Testimonials";
 import Astrologer from "./components/Astrologer";
 import Footer from "./components/Footer";
@@ -48,7 +48,7 @@ function Landing() {
           <WhyUs />
           <AskTopics />
           <Consultation />
-          <Blueprint />
+          <LiveMap />
           <Testimonials />
         </main>
         <Footer />

@@ -6,7 +6,7 @@ import { BookingContext } from "../App";
 import StarCanvas from "./StarCanvas";
 import { CountUp } from "./Reveal";
 
-const GOLD_STARS_BG = "https://images.unsplash.com/photo-1429305336325-b84ace7eba3b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwzfHxzdWJ0bGUlMjBuaWdodCUyMHNreSUyMHN0YXJzJTIwdGV4dHVyZSUyMGxpZ2h0fGVufDB8fHx8MTc4ODIwNjA0N3ww&ixlib=rb-4.1.0&q=85";
+const GOLD_STARS_BG = "https://images.unsplash.com/photo-1462331940025-496dfbfc7569?crop=entropy&cs=srgb&fm=jpg&w=1600&q=80";
 
 const PEOPLE = [
   ["Aarav", "Maharashtra"], ["Priya", "Karnataka"], ["Rohit", "Delhi"],
@@ -14,6 +14,18 @@ const PEOPLE = [
   ["Vikram", "Rajasthan"], ["Ananya", "West Bengal"], ["Kabir", "Uttar Pradesh"],
   ["Meera", "Kerala"], ["Ishan", "Madhya Pradesh"], ["Divya", "Telangana"],
 ];
+
+const ShootingStars = () => (
+  <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true" data-testid="shooting-stars">
+    {[
+      { "--t": "12%", "--r": "8%", "--d": "7s", "--dl": "0s" },
+      { "--t": "30%", "--r": "22%", "--d": "9s", "--dl": "2.8s" },
+      { "--t": "6%", "--r": "40%", "--d": "11s", "--dl": "5.2s" },
+    ].map((style, i) => (
+      <span key={i} className="shooting-star" style={style} />
+    ))}
+  </div>
+);
 
 const MaskedLine = ({ children, delay, className = "" }) => (
   <span className={`block overflow-hidden pb-1 ${className}`}>
@@ -61,8 +73,8 @@ const BookingNotifications = () => {
       const [name, state] = PEOPLE[Math.floor(Math.random() * PEOPLE.length)];
       const action = Math.random() > 0.45 ? t.v3.notifyBooked : t.v3.notifyBlueprint;
       setNote({ name, state, action, key: Date.now() });
-      hideT = setTimeout(() => setNote(null), 4200);
-      showT = setTimeout(cycle, 9500);
+      hideT = setTimeout(() => setNote(null), 3400);
+      showT = setTimeout(cycle, 5000);
     };
     showT = setTimeout(cycle, 4500);
     return () => { clearTimeout(showT); clearTimeout(hideT); };
@@ -110,33 +122,13 @@ export default function Hero() {
         src={GOLD_STARS_BG}
         alt=""
         aria-hidden="true"
-        className="absolute inset-0 w-full h-full object-cover opacity-[0.14] pointer-events-none"
-        style={{ filter: "sepia(0.7) hue-rotate(-15deg) brightness(1.1)" }}
+        className="absolute inset-0 w-full h-full object-cover opacity-[0.17] pointer-events-none"
+        style={{ filter: "sepia(0.7) hue-rotate(-15deg) brightness(1.15)" }}
       />
+      <ShootingStars />
       <motion.div style={{ y: starsY }} className="absolute inset-0 pointer-events-none">
         <StarCanvas density={100} />
       </motion.div>
-      <motion.svg
-        viewBox="0 0 220 180"
-        className="absolute right-[8%] top-[16%] w-36 sm:w-52 opacity-70 pointer-events-none"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.7 }}
-        transition={{ delay: 1.2, duration: 1 }}
-        aria-hidden="true"
-      >
-        <motion.path
-          d="M30 140 L80 70 L130 105 L185 35"
-          stroke="#C59B27" strokeWidth="0.8" fill="none"
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={{ duration: 2.6, delay: 1.3, ease: "easeInOut" }}
-        />
-        {[[30, 140], [80, 70], [130, 105], [185, 35]].map(([cx, cy], i) => (
-          <motion.circle key={i} cx={cx} cy={cy} r="2.4" fill="#C59B27"
-            initial={{ scale: 0 }} animate={{ scale: 1 }}
-            transition={{ delay: 1.3 + i * 0.55, duration: 0.5 }} />
-        ))}
-      </motion.svg>
 
       <motion.div style={{ y: textY, opacity: fade }} className="relative z-10 max-w-4xl mx-auto px-6 sm:px-10 pt-28 pb-20 w-full text-center">
         <motion.p
@@ -176,7 +168,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.95, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-6 text-sm sm:text-base uppercase tracking-[0.22em] text-smoke font-medium"
+          className="mt-6 text-sm sm:text-base uppercase tracking-[0.22em] font-medium text-shimmer"
           data-testid="hero-subline"
         >
           {t.hero.sub}

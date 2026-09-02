@@ -8,9 +8,10 @@ export default function Manifesto() {
       <div className="max-w-3xl mx-auto px-6 sm:px-10">
         <Reveal>
           <div className="border border-gold/25 bg-cream/50 rounded-2xl px-6 sm:px-10 py-8 sm:py-10 shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
-            <h2 className="font-deco text-sm sm:text-base tracking-[0.2em] uppercase text-charcoal text-center leading-relaxed">
-              {t.manifesto.title}
+            <h2 className="font-deco text-2xl sm:text-3xl tracking-[0.2em] uppercase text-gold text-center leading-relaxed">
+              {t.v4.manifestoTitle}
             </h2>
+            <p className="mt-2 text-center font-serif italic text-sm sm:text-base text-smoke">{t.v4.manifestoTag}</p>
             <div className="mt-6 divide-y divide-charcoal/8">
               {t.manifesto.chapters.map((ch, i) => (
                 <div key={ch.n} data-testid={`manifesto-chapter-${i}`} className="flex items-baseline gap-4 py-3">

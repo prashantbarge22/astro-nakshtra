@@ -6,7 +6,7 @@ import { useLang } from "../i18n";
 import { BookingContext } from "../App";
 
 const icons = [Briefcase, Heart, Users, Coins, HeartPulse, Compass, Gem];
-const STAR_BG = "https://images.unsplash.com/photo-1429305336325-b84ace7eba3b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwzfHxzdWJ0bGUlMjBuaWdodCUyMHNreSUyMHN0YXJzJTIwdGV4dHVyZSUyMGxpZ2h0fGVufDB8fHx8MTc4ODIwNjA0N3ww&ixlib=rb-4.1.0&q=85";
+const STAR_BG = "https://images.unsplash.com/photo-1511895426328-dc8714191300?crop=entropy&cs=srgb&fm=jpg&w=1600&q=80";
 
 export default function AskTopics() {
   const { t } = useLang();
@@ -16,7 +16,7 @@ export default function AskTopics() {
       <div className="max-w-7xl mx-auto px-6 sm:px-10">
         <Reveal>
           <div className="relative rounded-2xl overflow-hidden border border-gold/20">
-            <img src={STAR_BG} alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover opacity-30" loading="lazy" />
+            <img src={STAR_BG} alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover opacity-30 grayscale" loading="lazy" />
             <div className="absolute inset-0 bg-gradient-to-b from-ivory/70 via-ivory/40 to-ivory/85" />
             <div className="relative px-6 py-12 sm:py-14 text-center">
               <p className="font-deco text-3xl sm:text-4xl lg:text-5xl tracking-wide text-charcoal" data-testid="ask-eyebrow-big">

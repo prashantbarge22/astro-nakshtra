@@ -183,6 +183,23 @@ const en = {
     liveLabel: "Slots booked till date",
     liveNote: "Live — updates as bookings come in",
   },
+  v4: {
+    manifestoTitle: "Why us?",
+    manifestoTag: "Because your life deserves more than a copy-paste answer.",
+    plansEyebrow: "Our plans",
+    plansTitle: "Two ways to begin.",
+    plan99Title: "Personal Consultation",
+    plan99Cta: "Book your ₹99 slot",
+    plan149Title: "Astral Nakshatra Blueprint",
+    plan149Cta: "Get your blueprint",
+    reportsSold: "reports sold & counting",
+    peopleLive: "people live on this page",
+    orderBooked: "just booked a slot",
+    orderBlueprint: "got the blueprint",
+    mapTitle: "Live across India",
+    mapSub: "Real bookings from real people — happening right now.",
+    reviewsWorld: "across the world",
+  },
 };
 
 const hi = {
@@ -367,6 +384,23 @@ const hi = {
     bpLine: "आपके बारे में गंभीर तथ्य — जो आपने कभी पूछे ही नहीं।",
     liveLabel: "अब तक बुक किए गए स्लॉट",
     liveNote: "लाइव — बुकिंग आते ही अपडेट",
+  },
+  v4: {
+    manifestoTitle: "हम ही क्यों?",
+    manifestoTag: "क्योंकि आपकी ज़िंदगी कॉपी-पेस्ट जवाब से ज़्यादा की हकदार है।",
+    plansEyebrow: "हमारे प्लान",
+    plansTitle: "शुरुआत के दो तरीके।",
+    plan99Title: "व्यक्तिगत परामर्श",
+    plan99Cta: "अपना ₹99 स्लॉट बुक करें",
+    plan149Title: "एस्ट्रल नक्षत्र ब्लूप्रिंट",
+    plan149Cta: "ब्लूप्रिंट पाएं",
+    reportsSold: "रिपोर्ट बिकीं और जारी",
+    peopleLive: "लोग इस पेज पर लाइव",
+    orderBooked: "ने अभी स्लॉट बुक किया",
+    orderBlueprint: "ने ब्लूप्रिंट लिया",
+    mapTitle: "पूरे भारत में लाइव",
+    mapSub: "असली लोगों की असली बुकिंग — इसी समय हो रही है।",
+    reviewsWorld: "दुनिया भर से",
   },
 };
 
