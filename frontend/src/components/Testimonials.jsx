@@ -124,6 +124,12 @@ export default function Testimonials() {
             ))}
           </AnimatePresence>
         </div>
+
+        <Reveal className="mt-12 text-center">
+          <p className="font-serif italic text-xl sm:text-2xl text-gold max-w-2xl mx-auto leading-snug" data-testid="trust-closing-line">
+            “{t.v4.trustClosing}”
+          </p>
+        </Reveal>
       </div>
     </section>
   );

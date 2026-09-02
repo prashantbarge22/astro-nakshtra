@@ -13,33 +13,33 @@ const ORDER_FEED = [
 const PlanCard = ({ testid, ctaTestid, price, title, tag, items, cta, onClick, badge, delay = 0 }) => (
   <Reveal delay={delay} className="h-full">
     <div className="beam-border rounded-3xl h-full" data-testid={testid}>
-      <div className="beam-inner bg-ivory rounded-[calc(1.5rem-1.5px)] p-8 sm:p-10 h-full flex flex-col">
+      <div className="beam-inner bg-ivory rounded-[calc(1.5rem-1.5px)] p-6 sm:p-8 h-full flex flex-col">
         {badge && (
           <span className="w-fit rounded-full bg-gold/15 border border-gold/40 text-gold text-[10px] uppercase tracking-[0.2em] font-bold px-3.5 py-1.5 mb-4" data-testid={`${testid}-badge`}>
             {badge}
           </span>
         )}
-        <p className="font-deco text-5xl sm:text-6xl text-charcoal">{price}</p>
-        <h3 className="mt-4 font-serif text-2xl text-charcoal leading-snug">{title}</h3>
-        <p className="mt-2 font-serif italic text-gold">{tag}</p>
-        <ul className="mt-7 space-y-3 flex-1">
+        <p className="font-deco text-4xl sm:text-5xl text-charcoal">{price}</p>
+        <h3 className="mt-3 font-serif text-xl sm:text-2xl text-charcoal leading-snug">{title}</h3>
+        <p className="mt-2 font-serif italic text-gold text-sm sm:text-base">{tag}</p>
+        <ul className="mt-6 space-y-2.5 flex-1">
           {items.map((g, i) => (
             <motion.li
               key={i}
               initial={{ opacity: 0, x: -14 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.15 + i * 0.07, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="flex items-start gap-3 text-smoke text-sm sm:text-base"
+              transition={{ delay: 0.12 + i * 0.06, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="flex items-start gap-2.5 text-smoke text-sm"
             >
-              <Check size={16} strokeWidth={2} className="text-gold mt-0.5 shrink-0" /> {g}
+              <Check size={15} strokeWidth={2} className="text-gold mt-0.5 shrink-0" /> {g}
             </motion.li>
           ))}
         </ul>
         <button
           data-testid={ctaTestid}
           onClick={onClick}
-          className="relative overflow-hidden mt-8 rounded-full bg-gradient-to-b from-champagne to-gold text-charcoal font-bold text-sm sm:text-base px-8 py-4 hover:shadow-[0_12px_36px_rgba(197,155,39,0.45)] transition-shadow active:scale-[0.98] flex items-center justify-center gap-2"
+          className="relative overflow-hidden mt-7 rounded-full bg-gradient-to-b from-champagne to-gold text-charcoal font-bold text-sm sm:text-base px-6 py-4 hover:shadow-[0_12px_36px_rgba(197,155,39,0.45)] transition-shadow active:scale-[0.98] flex items-center justify-center gap-2"
         >
           <span className="gold-shine" aria-hidden="true" />
           {cta} <ArrowRight size={16} />
@@ -65,29 +65,36 @@ export default function Consultation() {
 
   const order = ORDER_FEED[orderIdx % ORDER_FEED.length];
   const orderAction = orderIdx % 3 === 2 ? t.v4.orderBlueprint : t.v4.orderBooked;
+  const bundleItems = [...t.consult.gets.slice(0, 3), ...t.blueprint.items.slice(0, 3), t.blueprint.items[8], t.blueprint.items[9]].filter(Boolean);
 
   return (
     <section id="plans" className="relative py-20 sm:py-24 overflow-hidden" data-testid="plans-section">
       <div className="absolute -top-32 left-1/4 w-[480px] h-[480px] rounded-full bg-[radial-gradient(circle,rgba(212,175,55,0.22),transparent_65%)] blur-3xl animate-pulse-soft pointer-events-none" aria-hidden="true" />
       <div className="absolute top-1/3 -right-32 w-[420px] h-[420px] rounded-full bg-[radial-gradient(circle,rgba(197,155,39,0.16),transparent_65%)] blur-3xl pointer-events-none" aria-hidden="true" />
-      <div className="relative max-w-6xl mx-auto px-6 sm:px-10">
+      <div className="relative max-w-7xl mx-auto px-6 sm:px-10">
         <Reveal>
           <Eyebrow>{t.v4.plansEyebrow}</Eyebrow>
           <h2 className="font-serif text-3xl sm:text-4xl tracking-tight text-charcoal">{t.v4.plansTitle}</h2>
         </Reveal>
 
-        <div className="mt-12 grid md:grid-cols-2 gap-8">
+        <div className="mt-12 grid md:grid-cols-3 gap-6">
           <PlanCard
             testid="plan-card-99" ctaTestid="plan-99-cta"
             price="₹99" title={t.v4.plan99Title} tag={t.consult.title}
-            items={t.consult.gets.slice(0, 6)} cta={t.v4.plan99Cta}
+            items={t.consult.gets.slice(0, 10)} cta={t.v4.plan99Cta}
             onClick={() => openBooking("consultation")}
           />
           <PlanCard
-            testid="plan-card-149" ctaTestid="plan-149-cta" delay={0.1}
+            testid="plan-card-149" ctaTestid="plan-149-cta" delay={0.08}
             price="₹349" title={t.v4.plan149Title} tag={t.v3.bpLine} badge={t.v4.cheapestBadge}
             items={t.blueprint.items} cta={t.v4.plan149Cta}
             onClick={() => openBooking("blueprint")}
+          />
+          <PlanCard
+            testid="plan-card-299" ctaTestid="plan-299-cta" delay={0.16}
+            price="₹299" title={t.v4.plan299Title} tag={t.v4.plan299Tag} badge={t.v4.bestValue}
+            items={bundleItems} cta={t.v4.plan299Cta}
+            onClick={() => openBooking("bundle")}
           />
         </div>
 

@@ -66,9 +66,9 @@ export const LangSwitch = ({ className = "" }) => {
 };
 
 const OfferTimer = () => {
-  const [secs, setSecs] = useState(300);
+  const [secs, setSecs] = useState(600);
   useEffect(() => {
-    const t = setInterval(() => setSecs((s) => (s <= 1 ? 300 : s - 1)), 1000);
+    const t = setInterval(() => setSecs((s) => (s <= 1 ? 600 : s - 1)), 1000);
     return () => clearInterval(t);
   }, []);
   const mm = String(Math.floor(secs / 60)).padStart(2, "0");

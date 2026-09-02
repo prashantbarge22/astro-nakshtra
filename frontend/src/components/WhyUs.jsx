@@ -16,14 +16,14 @@ export default function WhyUs() {
           </div>
         </Reveal>
         <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <Reveal className="sm:col-span-2">
+          <Reveal className="sm:col-span-2 lg:col-span-3">
             <motion.div
               whileHover={{ y: -4 }}
               transition={{ duration: 0.4 }}
               className="relative h-full rounded-2xl overflow-hidden"
               data-testid="why-hands-image"
             >
-              <img src={HANDS_IMG} alt="Two hands gently holding" className="w-full aspect-[16/9] sm:h-full sm:aspect-auto object-cover" loading="lazy" />
+              <img src={HANDS_IMG} alt="Two hands gently holding" className="w-full aspect-[16/9] sm:aspect-[21/9] object-cover" loading="lazy" />
               <div className="absolute inset-0 bg-gradient-to-t from-charcoal/70 via-charcoal/10 to-transparent" />
               <p className="absolute bottom-5 left-5 right-5 font-serif italic text-lg text-ivory leading-snug">
                 {t.why.imageCaption}

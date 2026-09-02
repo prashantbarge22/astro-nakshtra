@@ -27,7 +27,9 @@ const Field = ({ label, children, id }) => (
 export default function BookingModal({ open, pkg, onClose }) {
   const { t, lang } = useLang();
   const b = t.booking;
-  const amount = pkg === "blueprint" ? 349 : 99;
+  const AMOUNTS = { consultation: 99, blueprint: 349, bundle: 299 };
+  const amount = AMOUNTS[pkg] || 99;
+  const pkgTitle = pkg === "blueprint" ? b.titleBlueprint : pkg === "bundle" ? (lang === "hi" ? "कंप्लीट बंडल — ₹299" : "Complete Bundle — ₹299") : b.titleConsult;
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState(null);
@@ -95,7 +97,7 @@ export default function BookingModal({ open, pkg, onClose }) {
         amount: data.order.amount,
         currency: data.order.currency,
         name: "Astro Nakshatra",
-        description: pkg === "blueprint" ? "Astral Blueprint" : "20-minute personal consultation",
+        description: pkg === "consultation" ? "20-minute personal consultation" : pkgTitle,
         order_id: data.order.id,
         prefill: { name: form.full_name, email: form.email, contact: form.phone },
         theme: { color: "#C59B27" },
@@ -154,7 +156,7 @@ export default function BookingModal({ open, pkg, onClose }) {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <h2 className="font-serif text-2xl text-charcoal" data-testid="booking-modal-title">
-                    {pkg === "blueprint" ? b.titleBlueprint : b.titleConsult}
+                    {pkgTitle}
                   </h2>
                   <p className="mt-1 text-xs uppercase tracking-[0.18em] text-gold font-semibold">
                     {b.steps[step - 1]} · {step}/4
@@ -233,7 +235,7 @@ export default function BookingModal({ open, pkg, onClose }) {
                     <div data-testid="booking-step-4">
                       <div className="rounded-2xl border border-gold/25 bg-cream/60 p-6">
                         <div className="flex items-baseline justify-between">
-                          <span className="text-sm text-smoke">{pkg === "blueprint" ? b.titleBlueprint : b.titleConsult}</span>
+                          <span className="text-sm text-smoke">{pkgTitle}</span>
                           <span className="font-serif text-4xl text-charcoal" data-testid="booking-amount">₹{amount}</span>
                         </div>
                         <div className="mt-4 pt-4 border-t border-charcoal/10 text-sm text-smoke space-y-1.5">

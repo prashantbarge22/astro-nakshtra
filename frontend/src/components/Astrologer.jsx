@@ -12,6 +12,15 @@ export default function Astrologer() {
           <div className="relative rounded-2xl overflow-hidden shadow-[0_24px_60px_rgba(0,0,0,0.10)]" data-testid="astrologer-destiny-image">
             <img src={DESTINY_IMG} alt="A sky of stars — destiny" className="w-full aspect-[16/10] sm:aspect-[21/9] object-cover" loading="lazy" />
             <div className="absolute inset-0 aurora" aria-hidden="true" />
+            <div className="absolute inset-0 overflow-hidden" aria-hidden="true" data-testid="astrologer-shooting-stars">
+              {[
+                { "--t": "15%", "--r": "6%", "--d": "6s", "--dl": "0.5s" },
+                { "--t": "40%", "--r": "20%", "--d": "8s", "--dl": "2.4s" },
+                { "--t": "8%", "--r": "38%", "--d": "10s", "--dl": "4.6s" },
+              ].map((style, i) => (
+                <span key={i} className="shooting-star" style={style} />
+              ))}
+            </div>
             <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/20 to-transparent" />
             <p className="absolute bottom-6 sm:bottom-10 left-6 sm:left-10 right-6 font-serif italic text-2xl sm:text-3xl lg:text-4xl text-ivory leading-snug max-w-2xl" data-testid="astrologer-trust-line">
               {t.astrologer.trust}

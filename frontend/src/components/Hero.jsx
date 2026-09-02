@@ -147,7 +147,7 @@ export default function Hero() {
         <StarCanvas density={100} />
       </motion.div>
 
-      <motion.div style={{ y: textY, opacity: fade }} className="relative z-10 max-w-4xl mx-auto px-6 sm:px-10 pt-28 pb-20 w-full text-center">
+      <motion.div style={{ y: textY, opacity: fade }} className="relative z-10 max-w-6xl mx-auto px-6 sm:px-10 pt-28 pb-20 w-full text-center">
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

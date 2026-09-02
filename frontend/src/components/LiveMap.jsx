@@ -16,7 +16,13 @@ const ORIGINS = [
   { name: "Auckland", lat: -36.85, lng: 174.76 },
 ];
 
-const ARCS = ORIGINS.map((o) => ({ startLat: o.lat, startLng: o.lng, endLat: GWALIOR.lat, endLng: GWALIOR.lng }));
+const ARCS = ORIGINS.map((o, i) => ({
+  startLat: o.lat, startLng: o.lng, endLat: GWALIOR.lat, endLng: GWALIOR.lng,
+  dash: 0.25 + (i % 3) * 0.18,
+  gap: 0.12 + (i % 4) * 0.09,
+  time: 1300 + i * 340,
+  alt: 0.22 + (i % 3) * 0.14,
+}));
 const POINTS = [...ORIGINS, GWALIOR];
 
 const TICKER = [
@@ -30,6 +36,8 @@ export default function LiveMap() {
   const [size, setSize] = useState({ w: 800, h: 480 });
   const [live, setLive] = useState(38);
   const [orders, setOrders] = useState(23);
+  const [totalVisitors, setTotalVisitors] = useState(12483);
+  const [ordersToday, setOrdersToday] = useState(1264);
   const [tick, setTick] = useState(0);
 
   useEffect(() => {
@@ -47,10 +55,19 @@ export default function LiveMap() {
     const t1 = setInterval(() => setLive((v) => Math.max(30, Math.min(55, v + (Math.random() > 0.5 ? 1 : -1)))), 3500);
     const t2 = setInterval(() => setOrders((v) => v + 1), 20000);
     const t3 = setInterval(() => setTick((i) => i + 1), 4200);
-    return () => { clearInterval(t1); clearInterval(t2); clearInterval(t3); };
+    const t4 = setInterval(() => setTotalVisitors((v) => v + 7), 6000);
+    const t5 = setInterval(() => setOrdersToday((v) => v + 1), 18000);
+    return () => { clearInterval(t1); clearInterval(t2); clearInterval(t3); clearInterval(t4); clearInterval(t5); };
   }, []);
 
   const order = TICKER[tick % TICKER.length];
+
+  const chips = [
+    { id: "globe-live-visitors", value: `${live}+`, label: t.v4.liveVisitors, blink: true },
+    { id: "globe-live-orders", value: `${orders}+`, label: t.v4.ordersLive, blink: false },
+    { id: "globe-total-visitors", value: totalVisitors.toLocaleString("en-IN"), label: t.v4.totalVisitors, blink: false },
+    { id: "globe-orders-today", value: ordersToday.toLocaleString("en-IN"), label: t.v4.ordersToday, blink: false },
+  ];
 
   return (
     <section className="py-20 sm:py-24 bg-charcoal text-ivory" data-testid="live-map-section">
@@ -58,23 +75,18 @@ export default function LiveMap() {
         <Reveal className="text-center">
           <h2 className="font-serif text-3xl sm:text-4xl tracking-tight">{t.v4.mapTitle}</h2>
           <p className="mt-3 text-ivory/60 text-sm sm:text-base">{t.v4.mapSub}</p>
+          <p className="mt-2 font-serif italic text-champagne text-base sm:text-lg" data-testid="map-trust-tagline">{t.v4.mapTrust}</p>
         </Reveal>
 
         <Reveal delay={0.05}>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-            <div className="flex items-center gap-2.5 bg-ivory/5 border border-gold/25 rounded-full px-5 py-2.5" data-testid="globe-live-visitors">
-              <span className="inline-block h-2 w-2 rounded-full bg-gold animate-blink-dot" />
-              <span className="font-deco text-xl text-champagne">{live}+</span>
-              <span className="text-[10px] uppercase tracking-[0.18em] text-ivory/60 font-semibold">{t.v4.liveVisitors}</span>
-            </div>
-            <div className="flex items-center gap-2.5 bg-ivory/5 border border-gold/25 rounded-full px-5 py-2.5" data-testid="globe-live-orders">
-              <AnimatePresence mode="wait">
-                <motion.span key={orders} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.35 }} className="font-deco text-xl text-champagne inline-block">
-                  {orders}+
-                </motion.span>
-              </AnimatePresence>
-              <span className="text-[10px] uppercase tracking-[0.18em] text-ivory/60 font-semibold">{t.v4.ordersLive}</span>
-            </div>
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+            {chips.map((c) => (
+              <div key={c.id} className="flex items-center gap-2.5 bg-ivory/5 border border-gold/25 rounded-full px-5 py-2.5" data-testid={c.id}>
+                {c.blink && <span className="inline-block h-2 w-2 rounded-full bg-gold animate-blink-dot" />}
+                <span className="font-deco text-lg sm:text-xl text-champagne">{c.value}</span>
+                <span className="text-[10px] uppercase tracking-[0.18em] text-ivory/60 font-semibold">{c.label}</span>
+              </div>
+            ))}
           </div>
         </Reveal>
 
@@ -84,12 +96,13 @@ export default function LiveMap() {
               width={size.w}
               height={size.h}
               backgroundColor="rgba(0,0,0,0)"
-              globeImageUrl="//unpkg.com/three-globe/example/img/earth-dark.jpg"
+              globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
               arcsData={ARCS}
-              arcColor={() => ["#D4AF37", "#C59B27"]}
-              arcDashLength={0.4}
-              arcDashGap={0.25}
-              arcDashAnimateTime={2200}
+              arcColor={() => ["#FFD700", "#C59B27"]}
+              arcDashLength={(d) => d.dash}
+              arcDashGap={(d) => d.gap}
+              arcDashAnimateTime={(d) => d.time}
+              arcAltitude={(d) => d.alt}
               arcStroke={1.1}
               pointsData={POINTS}
               pointColor={(d) => (d.name === "Gwalior" ? "#FFD700" : "#C59B27")}
