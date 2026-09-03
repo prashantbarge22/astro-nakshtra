@@ -27,18 +27,28 @@ const Field = ({ label, children, id }) => (
 export default function BookingModal({ open, pkg, onClose }) {
   const { t, lang } = useLang();
   const b = t.booking;
-  const AMOUNTS = { consultation: 99, blueprint: 399, bundle: 299 };
-  const amount = AMOUNTS[pkg] || 99;
-  const pkgTitle = pkg === "blueprint" ? b.titleBlueprint : pkg === "bundle" ? (lang === "hi" ? "कंप्लीट बंडल — ₹299" : "Complete Bundle — ₹299") : b.titleConsult;
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState(null);
   const [paymentsEnabled, setPaymentsEnabled] = useState(false);
   const [provider, setProvider] = useState(null);
+  const [selPkg, setSelPkg] = useState(pkg);
   const [form, setForm] = useState({
     full_name: "", dob: "", birth_time: "", birth_place: "",
-    questions: "", preferred_day: "", preferred_time: "", email: "", phone: "",
+    questions: "", preferred_day: "", preferred_time: "", email: "", phone: "", mode: "call",
   });
+
+  useEffect(() => { setSelPkg(pkg); }, [pkg, open]);
+
+  const PLAN_PICKER = [
+    { id: "consultation", price: "₹99", en: "Consultation", hi: "परामर्श" },
+    { id: "blueprint", price: "₹399", en: "Blueprint", hi: "ब्लूप्रिंट" },
+    { id: "bundle", price: "₹299", en: "Bundle", hi: "बंडल" },
+  ];
+
+  const AMOUNTS = { consultation: 99, blueprint: 399, bundle: 299 };
+  const amount = AMOUNTS[selPkg] || 99;
+  const pkgTitle = selPkg === "blueprint" ? b.titleBlueprint : selPkg === "bundle" ? (lang === "hi" ? "कंप्लीट बंडल — ₹299" : "Complete Bundle — ₹299") : b.titleConsult;
 
   useEffect(() => {
     if (!open) return;
@@ -67,7 +77,7 @@ export default function BookingModal({ open, pkg, onClose }) {
       const res = await fetch(`${API}/bookings`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, package: pkg }),
+        body: JSON.stringify({ ...form, package: selPkg }),
       });
       if (!res.ok) throw new Error("booking failed");
       const data = await res.json();
@@ -97,7 +107,7 @@ export default function BookingModal({ open, pkg, onClose }) {
         amount: data.order.amount,
         currency: data.order.currency,
         name: "Astro Nakshatra",
-        description: pkg === "consultation" ? "20-minute personal consultation" : pkgTitle,
+        description: selPkg === "consultation" ? "20-minute personal consultation" : pkgTitle,
         order_id: data.order.id,
         prefill: { name: form.full_name, email: form.email, contact: form.phone },
         theme: { color: "#C59B27" },
@@ -169,6 +179,23 @@ export default function BookingModal({ open, pkg, onClose }) {
                   <span key={s} className={`h-1 flex-1 rounded-full transition-colors duration-500 ${s <= step ? "bg-gold" : "bg-charcoal/10"}`} />
                 ))}
               </div>
+              <div className="mt-5" data-testid="plan-picker">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-smoke font-semibold mb-2">{b.choosePlan}</p>
+                <div className="grid grid-cols-3 gap-2">
+                  {PLAN_PICKER.map((p) => (
+                    <button
+                      key={p.id}
+                      type="button"
+                      data-testid={`plan-pick-${p.id}`}
+                      onClick={() => setSelPkg(p.id)}
+                      className={`rounded-xl border px-3 py-2.5 text-center transition-colors ${selPkg === p.id ? "border-gold bg-gold/10" : "border-charcoal/10 bg-cream/40 hover:border-gold/40"}`}
+                    >
+                      <span className="block font-deco text-lg text-charcoal">{p.price}</span>
+                      <span className="block text-[10px] uppercase tracking-wider text-smoke">{lang === "hi" ? p.hi : p.en}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
 
               <AnimatePresence mode="wait">
                 <motion.div
@@ -188,9 +215,12 @@ export default function BookingModal({ open, pkg, onClose }) {
                         <Field label={b.dob} id="bk-dob">
                           <input id="bk-dob" data-testid="booking-dob-input" type="date" className={inputCls} value={form.dob} onChange={set("dob")} />
                         </Field>
-                        <Field label={b.time} id="bk-time">
-                          <input id="bk-time" data-testid="booking-time-input" type="time" className={inputCls} value={form.birth_time} onChange={set("birth_time")} />
-                        </Field>
+                        <div>
+                          <Field label={b.time} id="bk-time">
+                            <input id="bk-time" data-testid="booking-time-input" type="time" className={inputCls} value={form.birth_time} onChange={set("birth_time")} />
+                          </Field>
+                          <p className="mt-2 text-[11px] text-smoke/70 italic leading-snug" data-testid="birth-time-note">{b.tentativeNote}</p>
+                        </div>
                       </div>
                       <Field label={b.place} id="bk-place">
                         <input id="bk-place" data-testid="booking-place-input" className={inputCls} value={form.birth_place} onChange={set("birth_place")} placeholder="Jaipur, Rajasthan" />
@@ -228,11 +258,30 @@ export default function BookingModal({ open, pkg, onClose }) {
                       <Field label={b.phone} id="bk-phone">
                         <input id="bk-phone" data-testid="booking-phone-input" type="tel" className={inputCls} value={form.phone} onChange={set("phone")} placeholder="+91 98XXX XXXXX" />
                       </Field>
+                      <div data-testid="session-mode-picker">
+                        <span className="block text-xs uppercase tracking-[0.15em] font-semibold text-smoke mb-2">{b.modeLabel}</span>
+                        <div className="grid grid-cols-2 gap-3">
+                          {[{ id: "call", label: b.modeCall }, { id: "chat", label: b.modeChat }].map((m) => (
+                            <button
+                              key={m.id}
+                              type="button"
+                              data-testid={`mode-${m.id}`}
+                              onClick={() => setForm((f) => ({ ...f, mode: m.id }))}
+                              className={`rounded-xl border px-4 py-3 text-sm font-semibold transition-colors ${form.mode === m.id ? "border-gold bg-gold/10 text-charcoal" : "border-charcoal/15 text-smoke hover:border-gold/40"}`}
+                            >
+                              {m.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   )}
 
                   {step === 4 && (
                     <div data-testid="booking-step-4">
+                      <p className="mb-4 text-xs text-smoke italic flex items-start gap-2" data-testid="check-details-note">
+                        <span className="text-gold">✦</span> {b.checkNote}
+                      </p>
                       <div className="rounded-2xl border border-gold/25 bg-cream/60 p-6">
                         <div className="flex items-baseline justify-between">
                           <span className="text-sm text-smoke">{pkgTitle}</span>

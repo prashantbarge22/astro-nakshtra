@@ -40,6 +40,7 @@ class BookingCreate(BaseModel):
     email: EmailStr
     phone: str
     package: str = "consultation"
+    mode: str = "call"
 
 
 class PaymentVerify(BaseModel):
