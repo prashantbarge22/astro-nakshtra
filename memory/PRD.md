@@ -40,17 +40,20 @@ India's first one-on-one quick personal astrology guidance. ₹99 for a 20-minut
 
 ## Placeholders to replace before launch
 - Razorpay keys are TEST (rzp_test_TWVPuJ9eltbDD6) — swap LIVE keys in backend/.env
-- Phone/WhatsApp: +91 99999 99999 — still placeholder, user skipped
-- Instagram: @astronakshatra — placeholder, user skipped
+- Phone/WhatsApp/Email/Instagram: ALL placeholders now centralized in `/app/frontend/src/config.js` (CONTACT) — user edits that ONE file to update footer + WhatsApp links everywhere (done 2026-10-15, user chose placeholders for now)
 - Testimonials: sample quotes from brief
 - Admin password Nakshatra@4821 — user may change
 
 ## Backlog (prioritized)
-- P0: Razorpay TEST → LIVE keys; real phone/WhatsApp/Instagram details.
-- P1: Slot capacity counter tied to real availability; Razorpay webhook reconciliation.
+- P0: Razorpay TEST → LIVE keys; real phone/WhatsApp/Instagram details (edit src/config.js only).
+- P1: Slot capacity counter tied to real availability; Razorpay webhook reconciliation; show feedback submissions in /admin (user deferred); define "On chat" session delivery flow (user deferred).
 - P2: Privacy/Terms pages; real verified reviews; referral tracking; WhatsApp Business API alerts.
 
 ## Next Tasks
-1. Swap Razorpay live keys + update contact details (awaiting user values).
+1. Swap Razorpay live keys + update contact details in src/config.js (awaiting user values).
 2. Add real verified reviews.
 3. WhatsApp Business API alerts.
+
+## Session note (2026-10-15)
+- User asked about missing "Save to GitHub" button → explained: Save button in chat input bar → "Save to Github"; requires paid plan (Standard+) and GitHub connected via home tab OAuth. Push is a user action.
+- Centralized contact placeholders into /app/frontend/src/config.js; Footer.jsx and i18n.js (en+hi footers) now consume CONTACT. Verified footer links render correctly in preview.

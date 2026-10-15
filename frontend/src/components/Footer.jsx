@@ -1,5 +1,6 @@
 import { Phone, Mail, Instagram, MessageCircle } from "lucide-react";
 import { useLang } from "../i18n";
+import { CONTACT } from "../config";
 import { LangSwitch } from "./Navbar";
 
 export default function Footer() {
@@ -13,16 +14,16 @@ export default function Footer() {
             <p className="mt-2 text-sm text-smoke max-w-xs">{t.footer.tagline}</p>
           </div>
           <div className="flex flex-col gap-3 text-sm text-smoke">
-            <a data-testid="footer-phone" href="tel:+919999999999" className="flex items-center gap-2.5 hover:text-charcoal transition-colors">
+            <a data-testid="footer-phone" href={`tel:${CONTACT.phoneTel}`} className="flex items-center gap-2.5 hover:text-charcoal transition-colors">
               <Phone size={15} strokeWidth={1.5} className="text-gold" /> {t.footer.phone}
             </a>
-            <a data-testid="footer-whatsapp" href="https://wa.me/919999999999" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 hover:text-charcoal transition-colors">
+            <a data-testid="footer-whatsapp" href={`https://wa.me/${CONTACT.whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 hover:text-charcoal transition-colors">
               <MessageCircle size={15} strokeWidth={1.5} className="text-gold" /> WhatsApp
             </a>
-            <a data-testid="footer-email" href="mailto:care@astronakshatra.in" className="flex items-center gap-2.5 hover:text-charcoal transition-colors">
+            <a data-testid="footer-email" href={`mailto:${CONTACT.email}`} className="flex items-center gap-2.5 hover:text-charcoal transition-colors">
               <Mail size={15} strokeWidth={1.5} className="text-gold" /> {t.footer.email}
             </a>
-            <a data-testid="footer-instagram" href="https://instagram.com/astronakshatra" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 hover:text-charcoal transition-colors">
+            <a data-testid="footer-instagram" href={CONTACT.instagramUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 hover:text-charcoal transition-colors">
               <Instagram size={15} strokeWidth={1.5} className="text-gold" /> {t.footer.instagram}
             </a>
           </div>

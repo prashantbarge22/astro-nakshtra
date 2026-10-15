@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { CONTACT } from "./config";
 
 const en = {
   nav: { why: "Why Us", ask: "What to Ask", how: "How It Works", astrologer: "Astrologer", book: "Book Now — ₹99 only" },
@@ -140,9 +141,9 @@ const en = {
   },
   footer: {
     tagline: "A trusted personal service with an astrological soul.",
-    phone: "+91 99999 99999",
-    email: "care@astronakshatra.in",
-    instagram: "@astronakshatra",
+    phone: CONTACT.phoneDisplay,
+    email: CONTACT.email,
+    instagram: CONTACT.instagramHandle,
     rights: "© 2026 Astro Nakshatra — Shri Rajendra Kumar Gupta",
     privacy: "Privacy",
     terms: "Terms",
@@ -382,9 +383,9 @@ const hi = {
   },
   footer: {
     tagline: "ज्योतिषीय आत्मा वाली एक भरोसेमंद व्यक्तिगत सेवा।",
-    phone: "+91 99999 99999",
-    email: "care@astronakshatra.in",
-    instagram: "@astronakshatra",
+    phone: CONTACT.phoneDisplay,
+    email: CONTACT.email,
+    instagram: CONTACT.instagramHandle,
     rights: "© 2026 एस्ट्रो नक्षत्र — श्री राजेन्द्र कुमार गुप्ता",
     privacy: "गोपनीयता",
     terms: "शर्तें",
