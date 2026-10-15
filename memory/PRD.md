@@ -57,3 +57,4 @@ India's first one-on-one quick personal astrology guidance. ₹99 for a 20-minut
 ## Session note (2026-10-15)
 - User asked about missing "Save to GitHub" button → explained: Save button in chat input bar → "Save to Github"; requires paid plan (Standard+) and GitHub connected via home tab OAuth. Push is a user action.
 - Centralized contact placeholders into /app/frontend/src/config.js; Footer.jsx and i18n.js (en+hi footers) now consume CONTACT. Verified footer links render correctly in preview.
+- GitHub prep: added `.env`/`**/.env` to .gitignore (was NOT ignored — secrets would have leaked on push); created backend/.env.example and frontend/.env.example with <REPLACE_...> placeholders for every key; rewrote README.md with full setup + key table. Verified via `git check-ignore` that real .env files are excluded. Push itself remains a user action (Save → Save to Github).
